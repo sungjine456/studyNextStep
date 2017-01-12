@@ -5,18 +5,30 @@ import java.util.regex.Pattern;
 
 public class StringCalculator {
 	public int add(String str) {
-		if(str == null || str.trim().isEmpty()){
+		if(isBlank(str)){
 			return 0;
 		}
-		return add(split(str));
+		return sum(toInts(split(str)));
 	}
 	
-	private int add(String[] numbers){
+	private boolean isBlank(String str){
+		return str == null || str.trim().isEmpty();
+	}
+	
+	private int sum(int[] numbers){
 		int sum = 0;
-		for(int i = 0; i < numbers.length; i++){
-			sum += parseInt(numbers[i]);
+		for(int number : numbers){
+			sum += number;
 		}
 		return sum;
+	}
+	
+	private int[] toInts(String[] numbers){
+		int[] iarr = new int[numbers.length];
+		for(int i = 0; i < numbers.length; i++){
+			iarr[i] = parseInt(numbers[i]);
+		}
+		return iarr;
 	}
 	
 	private String[] split(String str){

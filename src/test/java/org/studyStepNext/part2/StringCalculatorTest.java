@@ -16,6 +16,7 @@ public class StringCalculatorTest {
 
 	@Test
 	public void addNullTest() {
+		assertEquals(0, sc.add(""));
 		assertEquals(0, sc.add(" "));
 		assertEquals(0, sc.add("   "));
 		assertEquals(0, sc.add(null));
@@ -42,6 +43,9 @@ public class StringCalculatorTest {
 	@Test(expected=RuntimeException.class)
 	public void addNegativeNumberTest() {
 		assertEquals(2, sc.add("-2"));
+		assertEquals(2, sc.add("-2,2"));
+		assertEquals(2, sc.add("-2;2"));
+		assertEquals(2, sc.add("//:\n-2:2"));
 	}
 	
 	@Test

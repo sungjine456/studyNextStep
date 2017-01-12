@@ -8,18 +8,23 @@ public class StringCalculator {
 		if(str == null || str.trim().isEmpty()){
 			return 0;
 		}
-		String[] numbers;
+		return add(split(str));
+	}
+	
+	private int add(String[] numbers){
 		int sum = 0;
-		Matcher m = Pattern.compile("//(.)\n(.*)").matcher(str);
-		if(m.find()){
-			numbers = m.group(2).split(m.group(1));
-		} else {
-			numbers = str.split(",|:");
-		}
 		for(int i = 0; i < numbers.length; i++){
 			sum += parseInt(numbers[i]);
 		}
 		return sum;
+	}
+	
+	private String[] split(String str){
+		Matcher m = Pattern.compile("//(.)\n(.*)").matcher(str);
+		if(m.find()){
+			return m.group(2).split(m.group(1));
+		} 
+		return str.split(",|:");
 	}
 	
 	private int parseInt(String s){

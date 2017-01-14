@@ -6,10 +6,20 @@ import static org.junit.Assert.*;
 import java.util.Map;
 
 import org.junit.Test;
-
+import org.studyStepNext.part3.model.User;
 import org.studyStepNext.part3.util.HttpRequestUtils.Pair;
 
 public class HttpRequestUtilsTest {
+	@Test
+	public void createUser(){
+		String parseString = "userId=1&password=2&name=a&email=asdf@naver.com";
+		User user = CustomUtils.createUser(parseString);
+		assertThat(user.getUserId(), is("1"));
+		assertThat(user.getPassword(), is("2"));
+		assertThat(user.getName(), is("a"));
+		assertThat(user.getEmail(), is("asdf@naver.com"));
+	}
+	
     @Test
     public void parseQueryString() {
         String queryString = "userId=javajigi";

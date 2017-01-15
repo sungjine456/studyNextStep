@@ -52,4 +52,7 @@ web-server 실습하기
 		1) 데이터가 HTML 본문으로 들어오기 때문에 URL을 자를 필요가 없다.
 		2) HTML 헤더에서 Content-Length가 본문의에서 데이터의 위치이기 때문에 Content-Length 값을 찾는다.
 		3) IOUtils의 readData()를 이용하여 데이터를 추출하여 User객체를 만든다.
+	5. 302 status code 적용
+		1) URL이 /user/create로 올때 index.html파일로 Redirect시킬 코드를 작성
+		2) create파일의 필요가 없어졌기 때문에 삭제
 ```

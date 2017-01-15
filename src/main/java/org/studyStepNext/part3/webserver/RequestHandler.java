@@ -50,8 +50,22 @@ public class RequestHandler extends Thread {
         	}
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = Files.readAllBytes(new File("./WebContent" + url).toPath());
-            response200Header(dos, body.length);
+            if(url.equals("/user/create")){
+            	response302Header(dos, body.length);
+            } else {
+            	response200Header(dos, body.length);
+            }
             responseBody(dos, body);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+    
+    private void response302Header(DataOutputStream dos, int lengthOfBodyContent) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            dos.writeBytes("Location: /index.html");
+            dos.writeBytes("\r\n");
         } catch (IOException e) {
             log.error(e.getMessage());
         }

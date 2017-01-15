@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.studyStepNext.part3.model.User;
 import org.studyStepNext.part3.util.CustomUtils;
+import org.studyStepNext.part3.util.HttpRequestUtils;
+import org.studyStepNext.part3.util.IOUtils;
 
 public class RequestHandler extends Thread {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
@@ -31,13 +33,20 @@ public class RequestHandler extends Thread {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream(); BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
         	String line = br.readLine();
         	String[] token = line.split(" ");
-        	String url = splitWhenUrlIsCreate(token[1]);
-        	
+        	String url = token[1];
+        	User user = null;
+        	int contentLength = 0;
         	while(!"".equals(line)){
         		if(line == null){
         			break;
         		}
+        		if(line.contains("Content-Length:")){
+        			contentLength = Integer.parseInt(HttpRequestUtils.parseHeader(line).getValue());
+        		}
         		line = br.readLine();
+        	}
+        	if(contentLength != 0){
+        		user = CustomUtils.createUser(IOUtils.readData(br, contentLength));
         	}
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = Files.readAllBytes(new File("./WebContent" + url).toPath());
@@ -48,16 +57,6 @@ public class RequestHandler extends Thread {
         }
     }
 
-    private String splitWhenUrlIsCreate(String url){
-    	String requestPath = "";
-    	if(url.contains("?")){
-    		int index = url.indexOf("?");
-    		requestPath = url.substring(0, index);
-    		User user = CustomUtils.createUser(url.substring(index+1));
-    	}
-    	return "".equals(requestPath)?url:requestPath;
-    }
-    
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");

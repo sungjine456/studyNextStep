@@ -48,4 +48,8 @@ web-server 실습하기
 		1) 요청 URL에서 접근 경로와 데이터를 추출한다.
 		2) 데이터 파싱 후 User 클래스에 담는다.
 		3) create파일이 없어 에러가 나기에 create파일 생성
+	4. POST 방식으로 회원가입하기
+		1) 데이터가 HTML 본문으로 들어오기 때문에 URL을 자를 필요가 없다.
+		2) HTML 헤더에서 Content-Length가 본문의에서 데이터의 위치이기 때문에 Content-Length 값을 찾는다.
+		3) IOUtils의 readData()를 이용하여 데이터를 추출하여 User객체를 만든다.
 ```

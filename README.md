@@ -55,4 +55,8 @@ web-server 실습하기
 	5. 302 status code 적용
 		1) URL이 /user/create로 올때 index.html파일로 Redirect시킬 코드를 작성
 		2) create파일의 필요가 없어졌기 때문에 삭제
+	6. 로그인 하기
+		1) 로그인 성공시 index.html로 이동, 실패시 login_failed.html로 이동
+		2) 로그인 성공시 Cookie값을 logined=true로 실패시 Cookie값을 logined=false로 전달 
+		3) 성공 여부는 회원가입시 DataBase 클래스를 이용한다.
 ```

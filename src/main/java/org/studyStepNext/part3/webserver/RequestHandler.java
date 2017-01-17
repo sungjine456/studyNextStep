@@ -46,43 +46,43 @@ public class RequestHandler extends Thread {
             DataOutputStream dos = new DataOutputStream(out);
             if(url.equals("/user/create")){
             	DataBase.addUser(CustomUtils.createUser(IOUtils.readData(br, contentLength)));
-            	response302Header(dos);
+            	response302Header(dos, url);
             } else if(url.equals("/user/login")) {
             	if(CustomUtils.isLogin(IOUtils.readData(br, contentLength))){
             		isLogined = true;
             		url = "/index.html";
-            		response200Header(dos, CustomUtils.makeReponseBody(url).length);
             	} else {
             		isLogined = false;
             		url = "/user/login_failed.html";
-            		response200Header(dos, CustomUtils.makeReponseBody(url).length);
             	}
-            } else {
-            	response200Header(dos, CustomUtils.makeReponseBody(url).length);
             }
-            responseBody(dos, CustomUtils.makeReponseBody(url));
+            response200Header(dos, CustomUtils.makeReponseBody(url));
         } catch (IOException e) {
             log.error(e.getMessage());
         }
     }
     
-    private void response302Header(DataOutputStream dos) {
+    private void response302Header(DataOutputStream dos, String url) {
         try {
             dos.writeBytes("HTTP/1.1 302 Found \r\n");
-            dos.writeBytes("Location: /index.html");
+            dos.writeBytes("Location: " + url);
             dos.writeBytes("\r\n");
+            
+            responseBody(dos, CustomUtils.makeReponseBody(url));
         } catch (IOException e) {
             log.error(e.getMessage());
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, byte[] body) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("Content-Length: " + body.length + "\r\n");
             dos.writeBytes("Set-Cookie: logined=" + isLogined + "\r\n");
             dos.writeBytes("\r\n");
+            
+            responseBody(dos, body);
         } catch (IOException e) {
             log.error(e.getMessage());
         }

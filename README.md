@@ -59,4 +59,8 @@ web-server 실습하기
 		1) 로그인 성공시 index.html로 이동, 실패시 login_failed.html로 이동
 		2) 로그인 성공시 Cookie값을 logined=true로 실패시 Cookie값을 logined=false로 전달 
 		3) 성공 여부는 회원가입시 DataBase 클래스를 이용한다.
+	7. 사용자 목록 출력
+		1) 로그인 상태이면 목록 출력, 아니라면 login.html로 이동
+		2) 로그인 상태는 Cookie값에 logined가 true인지 false인지로 확인
+		3) parseValues에서 cookie의 key값이 중복될 때 duplicate 에러가 나서 수정
 ```

@@ -7,10 +7,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.studyStepNext.part3.db.DataBase;
+import org.studyStepNext.part3.model.User;
 import org.studyStepNext.part3.util.CustomUtils;
 import org.studyStepNext.part3.util.HttpRequestUtils;
 import org.studyStepNext.part3.util.IOUtils;
@@ -34,6 +39,7 @@ public class RequestHandler extends Thread {
         	String[] token = line.split(" ");
         	String url = token[1];
         	int contentLength = 0;
+        	Map<String, String> cookies = new HashMap<String, String>();
         	while(!"".equals(line)){
         		if(line == null){
         			break;
@@ -41,19 +47,35 @@ public class RequestHandler extends Thread {
         		if(line.contains("Content-Length:")){
         			contentLength = Integer.parseInt(HttpRequestUtils.parseHeader(line).getValue());
         		}
+        		if(line.contains("Cookie: ")){
+        			cookies = HttpRequestUtils.parseCookies(HttpRequestUtils.parseHeader(line).getValue());
+        		}
         		line = br.readLine();
         	}
             DataOutputStream dos = new DataOutputStream(out);
             if(url.equals("/user/create")){
             	DataBase.addUser(CustomUtils.createUser(IOUtils.readData(br, contentLength)));
-            	response302Header(dos, url);
+            	response302Header(dos);
             } else if(url.equals("/user/login")) {
+            	isLogined = false;
+        		url = "/user/login_failed.html";
             	if(CustomUtils.isLogin(IOUtils.readData(br, contentLength))){
             		isLogined = true;
             		url = "/index.html";
-            	} else {
-            		isLogined = false;
-            		url = "/user/login_failed.html";
+            	}
+            } else if(url.equals("/user/list")){
+            	isLogined = false;
+        		url = "/index.html";
+            	if(isCookieLogined(cookies)){
+            		StringBuilder sb = new StringBuilder();
+            		Collection<User> findUsers = DataBase.findAll();
+            		Iterator<User> usersIterator = findUsers.iterator();
+            		while(usersIterator.hasNext()){
+            			sb.append(usersIterator.next().toString());
+            			sb.append("\n");
+            		}
+            		isLogined = true;
+            		url = "/user/list.html";
             	}
             }
             response200Header(dos, CustomUtils.makeReponseBody(url));
@@ -62,7 +84,12 @@ public class RequestHandler extends Thread {
         }
     }
     
-    private void response302Header(DataOutputStream dos, String url) {
+    private boolean isCookieLogined(Map<String, String> cookies){
+    	return !cookies.isEmpty() && cookies.containsKey("logined") && Boolean.parseBoolean(cookies.get("logined"));
+    }
+    
+    private void response302Header(DataOutputStream dos) {
+    	String url = "/index.html";
         try {
             dos.writeBytes("HTTP/1.1 302 Found \r\n");
             dos.writeBytes("Location: " + url);
@@ -79,7 +106,7 @@ public class RequestHandler extends Thread {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + body.length + "\r\n");
-            dos.writeBytes("Set-Cookie: logined=" + isLogined + "\r\n");
+           	dos.writeBytes("Set-Cookie: logined=" + isLogined + "\r\n");
             dos.writeBytes("\r\n");
             
             responseBody(dos, body);

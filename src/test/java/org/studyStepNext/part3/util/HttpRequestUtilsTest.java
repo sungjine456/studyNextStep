@@ -50,6 +50,11 @@ public class HttpRequestUtilsTest {
         assertThat(parameters.get("logined"), is("true"));
         assertThat(parameters.get("JSessionId"), is("1234"));
         assertThat(parameters.get("session"), is(nullValue()));
+        cookies = "logined=true; JSessionId=1234; logined=true";
+        parameters = HttpRequestUtils.parseCookies(cookies);
+        assertThat(parameters.get("logined"), is("true"));
+        assertThat(parameters.get("JSessionId"), is("1234"));
+        assertThat(parameters.get("session"), is(nullValue()));
     }
 
     @Test

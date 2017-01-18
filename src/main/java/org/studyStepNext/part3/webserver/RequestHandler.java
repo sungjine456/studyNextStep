@@ -39,6 +39,7 @@ public class RequestHandler extends Thread {
         	String[] token = line.split(" ");
         	String url = token[1];
         	int contentLength = 0;
+        	String contentType = "text/html";
         	Map<String, String> cookies = new HashMap<String, String>();
         	while(!"".equals(line)){
         		if(line == null){
@@ -77,8 +78,10 @@ public class RequestHandler extends Thread {
             		isLogined = true;
             		url = "/user/list.html";
             	}
+            } else if(url.contains(".css")){
+            	contentType = "text/css";
             }
-            response200Header(dos, CustomUtils.makeReponseBody(url));
+            response200Header(dos, CustomUtils.makeReponseBody(url), contentType);
         } catch (IOException e) {
             log.error(e.getMessage());
         }
@@ -101,10 +104,10 @@ public class RequestHandler extends Thread {
         }
     }
 
-    private void response200Header(DataOutputStream dos, byte[] body) {
+    private void response200Header(DataOutputStream dos, byte[] body, String contentType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: "+ contentType +";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + body.length + "\r\n");
            	dos.writeBytes("Set-Cookie: logined=" + isLogined + "\r\n");
             dos.writeBytes("\r\n");

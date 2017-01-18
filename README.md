@@ -63,4 +63,6 @@ web-server 실습하기
 		1) 로그인 상태이면 목록 출력, 아니라면 login.html로 이동
 		2) 로그인 상태는 Cookie값에 logined가 true인지 false인지로 확인
 		3) parseValues에서 cookie의 key값이 중복될 때 duplicate 에러가 나서 수정
+	8. CSS 적용
+		1) 파일의 .css확장자를 찾아 contextType을 바꾸게 수정
 ```

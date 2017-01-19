@@ -66,3 +66,49 @@ web-server 실습하기
 	8. CSS 적용
 		1) 파일의 .css확장자를 찾아 contextType을 바꾸게 수정
 ```
+### part4
+```
+	#### part3에서 내가 작성한 코드와 javajigi님께서 작성한 코드의 차이점
+	1. index.html 응답하기
+		1) bufferedReader의 try-with-resources적용함
+		2) line이 null인지 체크 하기 전에 split을 함 (null 체크 후 split을 하는게 좋은 듯 싶다.)
+		3) line에 ""이 들어오는지 체크(할 필요가 없어 보인다.)
+```
+
+## 배운 내용들
+----
+### HTTP 통신 규약
+```
+	#### Client -> Server 
+	1. POST index.html HTTP/1.1
+	2. HOST: localhost:8080
+	2. Connection-length: 59
+	2. Content-Type: application/x-www-form-urlencoded
+	3.
+	4. userId=id
+	
+	1. 요청 라인
+		1) HTTP의 메소드, URI와 HTTP의 버전으로 띄어쓰기로 나누어져 있다.
+	2. 요청 헤더
+		1) Key: Value 쌍으로 존재한다.
+		2) Key: Value1, Value2 와 같이 여러개의 값을 전달할 수 있다. 
+	3. 요청 헤더와 요청 본문 사이에는 빈공간이 있어야한다.
+	4. 요청 본문
+		1) HTTP메소드가 POST일 때 Client에서 Server로 보내는 데이터를 나타낸다.
+		
+	#### Server -> Client
+	1. HTTP/1.1 200 OK
+	2. Content-Type: text/html;charset=utf-8
+	2. content-Length: 20
+	3.
+	4. <HTML></HTML>
+	
+	1. 상태라인
+		1) HTTP의 버전, 상태코드(200 OK)가 띄어쓰기로 나누어져 있다.
+	2. 응답헤더
+		1) Key: Value 쌍으로 존재한다.
+		2) Key: Value1, Value2 와 같이 여러개의 값을 전달할 수 있다.
+	3. 응답 헤더와 응답 본문 사이에는 빈공간이 있어야한다.
+	4. 응답 본문
+		1) Server에서 Client로 보내는 데이터를 나타낸다.
+```

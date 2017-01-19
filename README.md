@@ -73,13 +73,20 @@ web-server 실습하기
 		1) bufferedReader의 try-with-resources적용함
 		2) line이 null인지 체크 하기 전에 split을 함 (null 체크 후 split을 하는게 좋은 듯 싶다.)
 		3) line에 ""이 들어오는지 체크(할 필요가 없어 보인다.)
+	2. GET 방식으로 회원가입하기
+		1) url을 자르는 것과 User를 만드는 것을 method로 뽑아냈다.
+		2) 요청 url을 자르고 시작했다.(요청 url이 /user/create일 때만 자르는게 맞는것 같다.)
+		3) user의 데이터가 잘 들어왔는지 확인하지 않았다.(데이터가 Client에서 Server로 잘 들어왔는지 확인해야할 필요가있다.)
+		4) 책에서 "/user/create".startsWith(url) << 이 부분은 url.startsWith("/user/create")로 수정해아할 필요가 있다. url의 시작이 "/user/create" 이어야 하기 때문이다.
+		> javajigi님의 소스를 수정해 "/user/create"로 요청이올 때 index.html을 응답으로 보내도록 구현
 ```
 
 ## 배운 내용들
 ----
 ### HTTP 통신 규약
+
+#### * Client -> Server 
 ```
-	#### Client -> Server 
 	1. POST index.html HTTP/1.1
 	2. HOST: localhost:8080
 	2. Connection-length: 59
@@ -95,8 +102,10 @@ web-server 실습하기
 	3. 요청 헤더와 요청 본문 사이에는 빈공간이 있어야한다.
 	4. 요청 본문
 		1) HTTP메소드가 POST일 때 Client에서 Server로 보내는 데이터를 나타낸다.
-		
-	#### Server -> Client
+```	
+
+#### * Server -> Client
+```
 	1. HTTP/1.1 200 OK
 	2. Content-Type: text/html;charset=utf-8
 	2. content-Length: 20

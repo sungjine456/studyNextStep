@@ -25,6 +25,7 @@ DVCS
 
 ## 진행 순서
 ----
+
 ### part2
 ```
 문자열을 받아 계산하기.
@@ -80,13 +81,19 @@ web-server 실습하기
 		4) 책에서 "/user/create".startsWith(url) << 이 부분은 url.startsWith("/user/create")로 수정해아할 필요가 있다. 
 		   url의 시작이 "/user/create" 이어야 하기 때문이다.
 		> javajigi님의 소스를 수정해 "/user/create"로 요청이올 때 index.html을 응답으로 보내도록 구현
-	3) POST 방식으로 회원가입하기
+	3. POST 방식으로 회원가입하기
 		1) HttpRequestUtils 클래스에 있는 parseHeader 매소드를 사용했는데 javajigi님은 새로운 매소드를 만드셨다.
+	4. 302 status code 적용
+		1) response302Header메소드에 index.html을 그냥 써넣었다.
+		2) response302Header와 response200Header를 if/else로 나눠서 코딩했다.
+		> DataOutputStream는 if("/user/create".equals(url))위에 한번만 하면 될것 같다.
 ```
 
 ## 배운 내용들
 ----
+
 ### HTTP 통신 규약
+----
 
 #### * Client -> Server 
 ```
@@ -123,4 +130,14 @@ web-server 실습하기
 	3. 응답 헤더와 응답 본문 사이에는 빈공간이 있어야한다.
 	4. 응답 본문
 		1) Server에서 Client로 보내는 데이터를 나타낸다.
+```
+
+### 상태 코드
+----
+
+```
+	1. 2XX : 성공
+	2. 3XX : Redirect
+	3. 4XX : 요청 오류
+	4. 5XX : 서버 오류
 ```

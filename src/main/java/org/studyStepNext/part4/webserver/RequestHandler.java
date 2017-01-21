@@ -47,14 +47,14 @@ public class RequestHandler extends Thread {
         			contentLength = getContentLength(line);
         		}
         	}
+        	DataOutputStream dos = new DataOutputStream(out);
         	if("/user/create".equals(url)){
         		String body = IOUtils.readData(br, contentLength);
         		Map<String, String> params = HttpRequestUtils.parseQueryString(body);
         		User user = new User(params.get("userId"), params.get("passwrod"), params.get("name"), params.get("email"));
-        		url = "/index.html";
-        		log.debug("User : {}", user);                                              
+        		log.debug("User : {}", user);
+        		response302Header(dos, "/index.html");
         	}
-            DataOutputStream dos = new DataOutputStream(out);
             byte[] body = Files.readAllBytes(new File("./WebContent" + url).toPath());
             response200Header(dos, body.length);
             responseBody(dos, body);
@@ -67,6 +67,16 @@ public class RequestHandler extends Thread {
     	String[] headerTokens = line.split(":");
 		return Integer.parseInt(headerTokens[1].trim());
 	}
+    
+    private void response302Header(DataOutputStream dos, String url) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Redirect \r\n");
+            dos.writeBytes("Location: " + url + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
 
 	private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
         try {

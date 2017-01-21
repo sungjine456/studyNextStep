@@ -77,8 +77,11 @@ web-server 실습하기
 		1) url을 자르는 것과 User를 만드는 것을 method로 뽑아냈다.
 		2) 요청 url을 자르고 시작했다.(요청 url이 /user/create일 때만 자르는게 맞는것 같다.)
 		3) user의 데이터가 잘 들어왔는지 확인하지 않았다.(데이터가 Client에서 Server로 잘 들어왔는지 확인해야할 필요가있다.)
-		4) 책에서 "/user/create".startsWith(url) << 이 부분은 url.startsWith("/user/create")로 수정해아할 필요가 있다. url의 시작이 "/user/create" 이어야 하기 때문이다.
+		4) 책에서 "/user/create".startsWith(url) << 이 부분은 url.startsWith("/user/create")로 수정해아할 필요가 있다. 
+		   url의 시작이 "/user/create" 이어야 하기 때문이다.
 		> javajigi님의 소스를 수정해 "/user/create"로 요청이올 때 index.html을 응답으로 보내도록 구현
+	3) POST 방식으로 회원가입하기
+		1) HttpRequestUtils 클래스에 있는 parseHeader 매소드를 사용했는데 javajigi님은 새로운 매소드를 만드셨다.
 ```
 
 ## 배운 내용들

@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.studyStepNext.part3.util.IOUtils;
 import org.studyStepNext.part4.model.User;
 import org.studyStepNext.part4.util.HttpRequestUtils;
 
@@ -38,16 +39,22 @@ public class RequestHandler extends Thread {
         	}
         	String[] tokens = line.split(" ");
         	String url = tokens[1];
-        	if(url.startsWith("/user/create")){
-        		int index = url.indexOf("?");
-        		String queryString = url.substring(index+1);
-        		Map<String, String> params = HttpRequestUtils.parseQueryString(queryString);
+        	int contentLength = 0;
+        	while(!"".equals(line)){
+        		log.debug("header : {}", line);
+        		line = br.readLine();
+        		if(line.contains("Content-Length")){
+        			contentLength = getContentLength(line);
+        		}
+        	}
+        	if("/user/create".equals(url)){
+        		String body = IOUtils.readData(br, contentLength);
+        		Map<String, String> params = HttpRequestUtils.parseQueryString(body);
         		User user = new User(params.get("userId"), params.get("passwrod"), params.get("name"), params.get("email"));
         		url = "/index.html";
         		log.debug("User : {}", user);                                              
         	}
             DataOutputStream dos = new DataOutputStream(out);
-            System.out.println(url);
             byte[] body = Files.readAllBytes(new File("./WebContent" + url).toPath());
             response200Header(dos, body.length);
             responseBody(dos, body);
@@ -56,7 +63,12 @@ public class RequestHandler extends Thread {
         }
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private int getContentLength(String line) {
+    	String[] headerTokens = line.split(":");
+		return Integer.parseInt(headerTokens[1].trim());
+	}
+
+	private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
             dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");

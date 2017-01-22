@@ -104,7 +104,10 @@ part3에서 내가 작성한 코드와 javajigi님께서 작성한 코드의 차
 		> responseResource 메소드의 OutputStream 파라미터를 DataOutputStream 파라미터로 수정
 		> user가 null인지 비교하는 것을 패스워드와 null이 아닌지 비교하는 것으로 수정하고 responseResource 메소드를
 		  한번만 사용
-		> 마지막 else 삭제 후 responseResource 메소드만 사용  
+		> 마지막 else 삭제 후 responseResource 메소드만 사용
+	
+	6. 사용자 목록 출력
+		1) /user/list.html로 보내는 것이 아닌 사용자의 목록으로 페이지를 구성하심 
 ```
 
 ## 배운 내용들

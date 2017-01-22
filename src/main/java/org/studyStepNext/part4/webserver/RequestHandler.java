@@ -14,6 +14,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.studyStepNext.part3.util.IOUtils;
+import org.studyStepNext.part4.db.DataBase;
 import org.studyStepNext.part4.model.User;
 import org.studyStepNext.part4.util.HttpRequestUtils;
 
@@ -51,16 +52,40 @@ public class RequestHandler extends Thread {
         	if("/user/create".equals(url)){
         		String body = IOUtils.readData(br, contentLength);
         		Map<String, String> params = HttpRequestUtils.parseQueryString(body);
-        		User user = new User(params.get("userId"), params.get("passwrod"), params.get("name"), params.get("email"));
+        		User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
         		log.debug("User : {}", user);
+        		DataBase.addUser(user);
         		response302Header(dos, "/index.html");
+        	} else if("/user/login".equals(url)){
+        		String body = IOUtils.readData(br, contentLength);
+        		Map<String, String> params = HttpRequestUtils.parseQueryString(body);
+        		User user = DataBase.findUserById(params.get("userId"));
+        		if(user != null && user.getPassword().equals(params.get("password"))){
+        			response302LoginSuccessHeader(dos);
+        		}
+        		responseResource(dos, "/user/login_failed.html");
         	}
-            byte[] body = Files.readAllBytes(new File("./WebContent" + url).toPath());
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+    		responseResource(dos, url);
         } catch (IOException e) {
             log.error(e.getMessage());
         }
+    }
+    
+    private void response302LoginSuccessHeader(DataOutputStream dos) {
+    	try {
+            dos.writeBytes("HTTP/1.1 302 Redirect \r\n");
+            dos.writeBytes("Set-Cookie: logined=true \r\n");
+            dos.writeBytes("Location: /index.html\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+    
+    private void responseResource(DataOutputStream dos, String url) throws IOException {
+    	byte[] body = Files.readAllBytes(new File("./WebContent" + url).toPath());
+        response200Header(dos, body.length);
+        responseBody(dos, body);
     }
 
     private int getContentLength(String line) {

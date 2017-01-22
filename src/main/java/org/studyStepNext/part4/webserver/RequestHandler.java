@@ -87,7 +87,11 @@ public class RequestHandler extends Thread {
         		sb.append("</table>");
         		byte[] body = sb.toString().getBytes();
         		response200Header(dos, body.length);
-                responseBody(dos, body);        		
+                responseBody(dos, body);
+        	} else if(url.endsWith(".css")){
+            	byte[] body = Files.readAllBytes(new File("./WebContent" + url).toPath());
+                response200CssHeader(dos, body.length);
+                responseBody(dos, body);
         	}
     		responseResource(dos, url);
         } catch (IOException e) {
@@ -131,6 +135,17 @@ public class RequestHandler extends Thread {
         try {
             dos.writeBytes("HTTP/1.1 302 Redirect \r\n");
             dos.writeBytes("Location: " + url + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+    
+    private void response200CssHeader(DataOutputStream dos, int lengthOfBodyContent) {
+        try {
+            dos.writeBytes("HTTP/1.1 200 OK \r\n");
+            dos.writeBytes("Content-Type: text/css\r\n");
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             log.error(e.getMessage());

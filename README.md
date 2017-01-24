@@ -124,6 +124,17 @@ part3에서 내가 작성한 코드와 javajigi님께서 작성한 코드의 차
 		
 	3. 다형성을 활용해 URL에 대한 분기 처리를 제거
 		1) 이번 실습은 구조는 잡았지만, 이 외에는 모르겠다.
+
+책을 통한 리팩토링
+	1. 요청 데이터를 별도의 클래스로 분리
+		1.1 책의 코드를 따라침
+			1) line이 null일 때 처리
+			2) 내가 그냥 POST와 GET으로 나눴다면 요청라인, 요청 헤더 요청 본문으로 나눈 후 POST와 GET으로 나누셨다.
+			> 요청 헤더를 읽을 때 while문에서 line이 null일 때 체크해주지 않으면 nullPointException이 난다.
+		1.2 책의 코드를 리팩토링
+			1) processRequestLine 메소드를 RequestLine 클래스로 분리
+			2) method를 enum으로 분리
+			3) RequestHandler에 적용
 ```
 
 ## 배운 내용들
@@ -177,4 +188,12 @@ part3에서 내가 작성한 코드와 javajigi님께서 작성한 코드의 차
 	2. 3XX : Redirect
 	3. 4XX : 요청 오류
 	4. 5XX : 서버 오류
+```
+
+### socket closed Exception
+----
+```
+	part5 에서 책을 통한 리팩토링을 진행하다가 HttpRequest에서 bufferedReader를 close했다.
+	그랬더니 < java.net.SocketException: Socket closed >가 났다.
+	bufferedReader등 Stream의 close는 잘 보고 해야겠다.
 ```

@@ -20,6 +20,8 @@ public class HttpRequestTest {
 		assertEquals("/user/create", request.getPath());
 		assertEquals("keep-alive", request.getHeader("Connection"));
 		assertEquals("id", request.getParameter("userId"));
+		assertEquals("pas", request.getParameter("password"));
+		assertEquals("name", request.getParameter("name"));
 	}
 
 	@Test
@@ -31,5 +33,7 @@ public class HttpRequestTest {
 		assertEquals("/user/create", request.getPath());
 		assertEquals("keep-alive", request.getHeader("Connection"));
 		assertEquals("id", request.getParameter("userId"));
+		assertEquals("pas", request.getParameter("password"));
+		assertEquals("name", request.getParameter("name"));
 	}
 }

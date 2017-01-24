@@ -10,42 +10,38 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.studyStepNext.part5.util.HttpRequestUtils;
+import org.studyStepNext.part5.util.IOUtils;
 
 public class HttpRequest {
 	private static final Logger log = LoggerFactory.getLogger(HttpRequest.class);
 
-	private String method;
-	private String path;
 	private Map<String, String> headers = new HashMap<String, String>();
-	private Map<String, String> parameters = new HashMap<String, String>();
+	private Map<String, String> params = new HashMap<String, String>();
+	private RequestLine requestLine;
 	
 	public HttpRequest(InputStream in) {
-		try(BufferedReader br = new BufferedReader(new InputStreamReader(in))){
+		try{
+			BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 			String line = br.readLine();
-			String[] splitLine = line.split(" ");
-			method = splitLine[0];
-			if(method.equals("POST")){
-				path = splitLine[1];
+			if(line == null){
+				return;
+			}
+
+			requestLine = new RequestLine(line);
+			
+			line = br.readLine();
+			while(line != null && !line.equals("")){
+				log.debug("header : {}", line);
+				String[] tokens = line.split(":");
+				headers.put(tokens[0].trim(), tokens[1].trim());
 				line = br.readLine();
-				while(!line.equals("")){
-					log.debug(line);
-					String[] splitHeader = line.split(": ");
-					headers.put(splitHeader[0], splitHeader[1]);
-					line = br.readLine();
-				}
-				parameters = HttpRequestUtils.parseQueryString(br.readLine());
+			}
+
+			if("POST".equals(getMethod())){
+				String body = IOUtils.readData(br, Integer.parseInt(headers.get("Content-Length")));
+				params = HttpRequestUtils.parseQueryString(body);
 			} else {
-				System.out.println(splitLine[1]);
-				String[] splitUrl = splitLine[1].split("\\?");
-				path = splitUrl[0];
-				parameters = HttpRequestUtils.parseQueryString(splitUrl[1]);
-				line = br.readLine();
-				while(line != null && !line.equals("")){
-					log.debug(line);
-					String[] splitHeader = line.split(": ");
-					headers.put(splitHeader[0], splitHeader[1]);
-					line = br.readLine();
-				}
+				params = requestLine.getParams();
 			}
 		}catch(IOException e){
 			log.error(e.getMessage());
@@ -53,15 +49,15 @@ public class HttpRequest {
 	}
 	
 	public String getMethod(){
-		return method;
+		return requestLine.getMethod().name();
 	}
 	public String getPath(){
-		return path;
+		return requestLine.getPath();
 	}
 	public String getHeader(String header){
 		return headers.get(header);
 	}
 	public String getParameter(String parameter){
-		return parameters.get(parameter);
+		return params.get(parameter);
 	}
 }

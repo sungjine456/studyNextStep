@@ -1,11 +1,9 @@
 package org.studyStepNext.part5.webserver;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.file.Files;
@@ -14,10 +12,9 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.studyStepNext.part3.util.IOUtils;
-import org.studyStepNext.part4.db.DataBase;
-import org.studyStepNext.part4.model.User;
-import org.studyStepNext.part4.util.HttpRequestUtils;
+import org.studyStepNext.part5.db.DataBase;
+import org.studyStepNext.part5.model.User;
+import org.studyStepNext.part5.util.HttpRequestUtils;
 
 public class RequestHandler extends Thread {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
@@ -33,45 +30,27 @@ public class RequestHandler extends Thread {
                 connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
-        	BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-        	String line = br.readLine();
-        	log.debug("request line : {}", line);
-        	if(line == null){
-        		return;
-        	}
-        	String[] tokens = line.split(" ");
-        	boolean logined = false;
-        	String url = tokens[1];
-        	int contentLength = 0;
-        	while(!"".equals(line)){
-        		log.debug("header : {}", line);
-        		line = br.readLine();
-        		if(line.contains("Content-Length")){
-        			contentLength = getContentLength(line);
-        		}
-        		if(line.contains("Cookie")){
-        			logined = isLogin(line);
-        		}
-        	}
+        	HttpRequest req = new HttpRequest(in);
+        	String path = getDefultPath(req.getPath());
         	DataOutputStream dos = new DataOutputStream(out);
-        	if("/user/create".equals(url)){
-        		String body = IOUtils.readData(br, contentLength);
-        		Map<String, String> params = HttpRequestUtils.parseQueryString(body);
-        		User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
+        	if("/user/create".equals(path)){
+        		User user = new User(
+        				req.getParameter("userId"), 
+        				req.getParameter("password"), 
+        				req.getParameter("name"), 
+        				req.getParameter("email"));
         		log.debug("User : {}", user);
         		DataBase.addUser(user);
         		response302Header(dos, "/index.html");
-        	} else if("/user/login".equals(url)){
-        		String body = IOUtils.readData(br, contentLength);
-        		Map<String, String> params = HttpRequestUtils.parseQueryString(body);
-        		User user = DataBase.findUserById(params.get("userId"));
-        		if(user != null && user.getPassword().equals(params.get("password"))){
+        	} else if("/user/login".equals(path)){
+        		User user = DataBase.findUserById(req.getParameter("userId"));
+        		if(user != null && user.getPassword().equals(req.getParameter("password"))){
         			response302LoginSuccessHeader(dos);
         		}
         		responseResource(dos, "/user/login_failed.html");
-        	} else if("/user/list".equals(url)){
-        		if(!logined){
-        			responseResource(dos, url);
+        	} else if("/user/list".equals(path)){
+        		if(!isLogin(req.getHeader("Cookie"))){
+        			responseResource(dos, path);
         			return;
         		}
         		Collection<User> users = DataBase.findAll();
@@ -88,20 +67,24 @@ public class RequestHandler extends Thread {
         		byte[] body = sb.toString().getBytes();
         		response200Header(dos, body.length);
                 responseBody(dos, body);
-        	} else if(url.endsWith(".css")){
-            	byte[] body = Files.readAllBytes(new File("./WebContent" + url).toPath());
-                response200CssHeader(dos, body.length);
-                responseBody(dos, body);
+        	} else if(path.endsWith(".css")){
+        		responseCssResource(dos, path);
         	}
-    		responseResource(dos, url);
+    		responseResource(dos, path);
         } catch (IOException e) {
             log.error(e.getMessage());
         }
     }
     
-    private boolean isLogin(String line){
-    	String[] headerTokens = line.split(":");
-    	Map<String, String> cookies = HttpRequestUtils.parseCookies(headerTokens[1].trim());
+    private String getDefultPath(String path){
+    	if("/".equals(path)){
+    		return "/index.html";
+    	}
+    	return path;
+    }
+    
+    private boolean isLogin(String cookiValue){
+    	Map<String, String> cookies = HttpRequestUtils.parseCookies(cookiValue);
     	String value = cookies.get("logined");
     	if(value == null){
     		return false;
@@ -120,21 +103,22 @@ public class RequestHandler extends Thread {
         }
     }
     
-    private void responseResource(DataOutputStream dos, String url) throws IOException {
-    	byte[] body = Files.readAllBytes(new File("./WebContent" + url).toPath());
+    private void responseCssResource(DataOutputStream dos, String path) throws IOException {
+    	byte[] body = Files.readAllBytes(new File("./WebContent" + path).toPath());
+        response200CssHeader(dos, body.length);
+        responseBody(dos, body);
+    }
+    
+    private void responseResource(DataOutputStream dos, String path) throws IOException {
+    	byte[] body = Files.readAllBytes(new File("./WebContent" + path).toPath());
         response200Header(dos, body.length);
         responseBody(dos, body);
     }
-
-    private int getContentLength(String line) {
-    	String[] headerTokens = line.split(":");
-		return Integer.parseInt(headerTokens[1].trim());
-	}
     
-    private void response302Header(DataOutputStream dos, String url) {
+    private void response302Header(DataOutputStream dos, String path) {
         try {
             dos.writeBytes("HTTP/1.1 302 Redirect \r\n");
-            dos.writeBytes("Location: " + url + "\r\n");
+            dos.writeBytes("Location: " + path + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             log.error(e.getMessage());

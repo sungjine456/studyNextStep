@@ -3,3 +3,5 @@
 .settings
 /target
 /src/test/resources/part5/Http_Forward.txt
+/src/test/resources/part5/Http_Cookie.txt
+/src/test/resources/part5/Http_Redirect.txt

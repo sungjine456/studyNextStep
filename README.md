@@ -140,6 +140,18 @@ part3에서 내가 작성한 코드와 javajigi님께서 작성한 코드의 차
 		1) 응답 헤더를 인스턴스 변수로 관리 한다.
 		2) processHeaders 메소드로 한번에 응답 헤더를 만든다.
 		3) forward 메소드에서 .css, .js, 등등 으로 나누어 Content-Type을 관리 한다.
+		
+	3. 다형성을 활용해 URL에 대한 분기 처리를 제거
+		1) 각 클래스에 controller를 implements하여 service메소드를 Overriding하여 재정의 한다.
+			RequestHandler에 메소드를 만들어 호출한다.
+		2) RequestMapping 클래스를 만들어 Controller를 담는 Collection을 만들고 URL을 키값으로
+			Controller를 implements한 클래스들을 담는다.
+			RequestHandler에서는 만들었던 메소드를 삭제하고 URL을 가지고 RequestMapping클래스 에서
+			Controller를 가져온다.
+		3) AbstractController를 만들어 controller를 implements하고 service메소드를 재정의 하는데
+			method에 따라 doGet과 doPost로 나눠지게 분기를 나눈다.
+			이전에 controller를 implements하고 있던 클래스들은 AbstractController를 extends하고
+			doGet이나 doPost를 Overriding하여 재정의 하면 된다.
 ```
 
 ## 배운 내용들

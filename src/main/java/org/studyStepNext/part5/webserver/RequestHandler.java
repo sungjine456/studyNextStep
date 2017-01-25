@@ -1,12 +1,9 @@
 package org.studyStepNext.part5.webserver;
 
-import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.file.Files;
 import java.util.Collection;
 import java.util.Map;
 
@@ -31,8 +28,8 @@ public class RequestHandler extends Thread {
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
         	HttpRequest req = new HttpRequest(in);
+        	HttpResponse res = new HttpResponse(out);
         	String path = getDefultPath(req.getPath());
-        	DataOutputStream dos = new DataOutputStream(out);
         	if("/user/create".equals(path)){
         		User user = new User(
         				req.getParameter("userId"), 
@@ -41,16 +38,18 @@ public class RequestHandler extends Thread {
         				req.getParameter("email"));
         		log.debug("User : {}", user);
         		DataBase.addUser(user);
-        		response302Header(dos, "/index.html");
+        		res.sendRedirect("/index.html");
         	} else if("/user/login".equals(path)){
         		User user = DataBase.findUserById(req.getParameter("userId"));
         		if(user != null && user.getPassword().equals(req.getParameter("password"))){
-        			response302LoginSuccessHeader(dos);
+        			res.addHeader("SetCookie", "logined=true");
+        			res.sendRedirect("/index.html");
+        		} else {
+        			res.sendRedirect("/user/login_failed.html");
         		}
-        		responseResource(dos, "/user/login_failed.html");
         	} else if("/user/list".equals(path)){
         		if(!isLogin(req.getHeader("Cookie"))){
-        			responseResource(dos, path);
+        			res.sendRedirect("/user/login.html");
         			return;
         		}
         		Collection<User> users = DataBase.findAll();
@@ -64,13 +63,10 @@ public class RequestHandler extends Thread {
         			sb.append("</tr>");
         		}
         		sb.append("</table>");
-        		byte[] body = sb.toString().getBytes();
-        		response200Header(dos, body.length);
-                responseBody(dos, body);
-        	} else if(path.endsWith(".css")){
-        		responseCssResource(dos, path);
+        		res.forwardBody(sb.toString());
+        	} else {
+        		res.forward(path);
         	}
-    		responseResource(dos, path);
         } catch (IOException e) {
             log.error(e.getMessage());
         }
@@ -90,69 +86,5 @@ public class RequestHandler extends Thread {
     		return false;
     	}
     	return Boolean.parseBoolean(value);
-    }
-    
-    private void response302LoginSuccessHeader(DataOutputStream dos) {
-    	try {
-            dos.writeBytes("HTTP/1.1 302 Redirect \r\n");
-            dos.writeBytes("Set-Cookie: logined=true \r\n");
-            dos.writeBytes("Location: /index.html\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-    }
-    
-    private void responseCssResource(DataOutputStream dos, String path) throws IOException {
-    	byte[] body = Files.readAllBytes(new File("./WebContent" + path).toPath());
-        response200CssHeader(dos, body.length);
-        responseBody(dos, body);
-    }
-    
-    private void responseResource(DataOutputStream dos, String path) throws IOException {
-    	byte[] body = Files.readAllBytes(new File("./WebContent" + path).toPath());
-        response200Header(dos, body.length);
-        responseBody(dos, body);
-    }
-    
-    private void response302Header(DataOutputStream dos, String path) {
-        try {
-            dos.writeBytes("HTTP/1.1 302 Redirect \r\n");
-            dos.writeBytes("Location: " + path + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-    }
-    
-    private void response200CssHeader(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/css\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-    }
-
-	private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
     }
 }

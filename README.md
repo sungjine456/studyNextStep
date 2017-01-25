@@ -131,10 +131,15 @@ part3에서 내가 작성한 코드와 javajigi님께서 작성한 코드의 차
 			1) line이 null일 때 처리
 			2) 내가 그냥 POST와 GET으로 나눴다면 요청라인, 요청 헤더 요청 본문으로 나눈 후 POST와 GET으로 나누셨다.
 			> 요청 헤더를 읽을 때 while문에서 line이 null일 때 체크해주지 않으면 nullPointException이 난다.
-		1.2 책의 코드를 리팩토링
+		1.2 책을 보며 책의 코드를 리팩토링 진행
 			1) processRequestLine 메소드를 RequestLine 클래스로 분리
 			2) method를 enum으로 분리
 			3) RequestHandler에 적용
+			
+	2. 응답 데이터를 별도의 클래스로 분리
+		1) 응답 헤더를 인스턴스 변수로 관리 한다.
+		2) processHeaders 메소드로 한번에 응답 헤더를 만든다.
+		3) forward 메소드에서 .css, .js, 등등 으로 나누어 Content-Type을 관리 한다.
 ```
 
 ## 배운 내용들

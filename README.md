@@ -153,6 +153,9 @@ part3에서 내가 작성한 코드와 javajigi님께서 작성한 코드의 차
 			이전에 controller를 implements하고 있던 클래스들은 AbstractController를 extends하고
 			doGet이나 doPost를 Overriding하여 재정의 하면 된다.
 ```
+### part6
+```
+```
 
 ## 배운 내용들
 ----

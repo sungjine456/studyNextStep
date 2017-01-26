@@ -155,6 +155,14 @@ part3에서 내가 작성한 코드와 javajigi님께서 작성한 코드의 차
 ```
 ### part6
 ```
+	1. 5장에서 본 Servlet/JSP 복습
+	
+	2. 개인정보수정 실습
+		1) list페이지에서 userId를 가지고 updateFormServlet으로 이동
+		2) list페이지에서 받은 userId가지고 해당 user의 정보 updateForm페이지에 데이터 뿌려주기
+		3) User클래스에 update메소드 추가
+		4) updateForm에서 수정할 정보를 가지고 updateServlet으로 이동
+		5) updateServlet에서 정보를 수정하고 list페이지에 데이터 뿌려주기
 ```
 
 ## 배운 내용들

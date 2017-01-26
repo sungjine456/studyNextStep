@@ -1,4 +1,4 @@
-package org.studyStepNext.part6;
+package org.studyStepNext.part6.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;

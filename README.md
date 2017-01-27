@@ -173,6 +173,8 @@ part3에서 내가 작성한 코드와 javajigi님께서 작성한 코드의 차
 		1) 회원 목록을 뿌려줄 때는 session에 user가 있는지 확인한 후 있으면 목록을 뿌려 주면된다.
 		2) updateForm과 update는 session에 user가 있는지 확인한 후 user.userId와 입력받은 userId를 비교한다.
 			일치 하면 update할 수 있게하고 없으면 index.jsp로 이동하게 한다.
+	5. 중복 코드 제거
+		1) .jsp 파일의 header, navigation과 footer를 각각 .jsp파일을 만들어 include시켰다.
 ```
 
 ## 배운 내용들

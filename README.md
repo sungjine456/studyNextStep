@@ -163,6 +163,11 @@ part3에서 내가 작성한 코드와 javajigi님께서 작성한 코드의 차
 		3) User클래스에 update메소드 추가
 		4) updateForm에서 수정할 정보를 가지고 updateServlet으로 이동
 		5) updateServlet에서 정보를 수정하고 list페이지에 데이터 뿌려주기
+		
+	3. 로그인/로그아웃 실습
+		1) loginServlet을 만들어 입력받은 아이디가 있는지 확인 후 페스워드를 확인하고 맞다면 session을 set한다.
+		2) index.jsp를 만들어 session이 있는지 확인하여 보여줄 내용만 보여 준다.
+		3) logoutServlet을 만들어 session을 지워준다.
 ```
 
 ## 배운 내용들

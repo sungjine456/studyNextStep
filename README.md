@@ -168,6 +168,11 @@ part3에서 내가 작성한 코드와 javajigi님께서 작성한 코드의 차
 		1) loginServlet을 만들어 입력받은 아이디가 있는지 확인 후 페스워드를 확인하고 맞다면 session을 set한다.
 		2) index.jsp를 만들어 session이 있는지 확인하여 보여줄 내용만 보여 준다.
 		3) logoutServlet을 만들어 session을 지워준다.
+		
+	4. 회원 목록 및 개인정보 수정 보안 강화 실습
+		1) 회원 목록을 뿌려줄 때는 session에 user가 있는지 확인한 후 있으면 목록을 뿌려 주면된다.
+		2) updateForm과 update는 session에 user가 있는지 확인한 후 user.userId와 입력받은 userId를 비교한다.
+			일치 하면 update할 수 있게하고 없으면 index.jsp로 이동하게 한다.
 ```
 
 ## 배운 내용들

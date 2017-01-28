@@ -2,15 +2,14 @@ package org.studyStepNext.part6.controller;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.studyStepNext.part6.db.DataBase;
 import org.studyStepNext.part6.model.User;
-import org.studyStepNext.part6.util.HttpRequestUtils;
 import org.studyStepNext.part6.webserver.HttpRequest;
 import org.studyStepNext.part6.webserver.HttpResponse;
+import org.studyStepNext.part6.webserver.HttpSession;
 
 public class ListUserController extends AbstractController {
 	private static final Logger log = LoggerFactory.getLogger(ListUserController.class);
@@ -18,8 +17,8 @@ public class ListUserController extends AbstractController {
 	@Override
 	public void doGet(HttpRequest req, HttpResponse res) {
 		try{
-			if(!isLogin(req.getHeader("Cookie"))){
-				res.sendRedirect("/user/login.html");
+			if(!isLogin(req.getSession())){
+				res.sendRedirect("/user/login.jsp");
 				return;
 			}
 			Collection<User> users = DataBase.findAll();
@@ -39,12 +38,11 @@ public class ListUserController extends AbstractController {
 		}
 	}
 	
-	private boolean isLogin(String cookiValue){
-    	Map<String, String> cookies = HttpRequestUtils.parseCookies(cookiValue);
-    	String value = cookies.get("logined");
-    	if(value == null){
+	private boolean isLogin(HttpSession session){
+		Object user = session.getAttribute("user");
+    	if(user == null){
     		return false;
     	}
-    	return Boolean.parseBoolean(value);
+    	return true;
     }
 }

@@ -183,6 +183,12 @@ part3에서 내가 작성한 코드와 javajigi님께서 작성한 코드의 차
 		2) 쿠키를 사용해서 아이디 전달
 		3) 쿠키클래스 생성하여 쿠키 관리
 		4) Session클래스 생성한 후 User의 로그인을 session을 통해 관리
+		
+MVC 프레임워크 구현
+	1. 1단계
+		1) DispatcherServlet을 만든다.
+		2) DispatcherServlet을 통해서 URL을 받아 Controller를 찾는다.
+		3) Controller에서 Data를 URL에 보낼 데이터 가공
 ```
 
 ## 배운 내용들

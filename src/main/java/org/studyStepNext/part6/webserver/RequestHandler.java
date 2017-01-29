@@ -30,13 +30,13 @@ public class RequestHandler extends Thread {
         	if(req.getCookies().getCookie("JSESSIONID") == null){
         		res.addHeader("Set-Cookie", "JSESSIONID=" + UUID.randomUUID());
         	}
-        	Controller controller = RequestMapping.getController(req.getPath());
-        	if(controller == null){
-        		String path = getDefultPath(req.getPath());
-        		res.forward(path);
-        	} else {
-        		controller.service(req, res);
-        	}
+//        	Controller controller = RequestMapping.getController(req.getPath());
+//        	if(controller == null){
+//        		String path = getDefultPath(req.getPath());
+//        		res.forward(path);
+//        	} else {
+//        		controller.service(req, res);
+//        	}
         } catch (IOException e) {
             log.error(e.getMessage());
         }

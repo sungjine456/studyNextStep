@@ -190,6 +190,12 @@ MVC 프레임워크 구현
 		2) DispatcherServlet을 통해서 URL을 받아 Controller를 찾는다.
 		3) Controller에서 Data를 URL에 보낼 데이터 가공
 ```
+### part7
+```
+JDBC 실습
+	1. JDBC적용 해보기
+		1) User생성, User찾기, User목록 찾기, User수정을 JDBC를 통해서 적용하기
+```
 
 ## 배운 내용들
 ----

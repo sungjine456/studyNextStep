@@ -3,8 +3,8 @@ package org.studyStepNext.part7.next.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.studyStepNext.part7.core.db.DataBase;
 import org.studyStepNext.part7.core.mvc.Controller;
+import org.studyStepNext.part7.next.dao.UserDao;
 
 public class ListUserController implements Controller {
     @Override
@@ -12,8 +12,8 @@ public class ListUserController implements Controller {
         if (!UserSessionUtils.isLogined(req.getSession())) {
             return "redirect:/users/loginForm";
         }
-
-        req.setAttribute("users", DataBase.findAll());
+        UserDao userDao = new UserDao();
+        req.setAttribute("users", userDao.findAll());
         return "/user/list.jsp";
     }
 }

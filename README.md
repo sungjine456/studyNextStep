@@ -195,6 +195,13 @@ MVC 프레임워크 구현
 JDBC 실습
 	1. JDBC적용 해보기
 		1) User생성, User찾기, User목록 찾기, User수정을 JDBC를 통해서 적용하기
+	2. DAO 리팩토링
+		1) 메소드 분리
+		2) 클래스 분리
+		3) DAO와 Template의 의존관계 분리
+		4) InsertTemplate과 UpdateTemplate 합치기
+		5) JdbcTemplate의 User와 의존관계를 끊기
+		6) select 리팩토링
 ```
 
 ## 배운 내용들

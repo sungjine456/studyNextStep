@@ -33,6 +33,9 @@ public class UserDaoTest {
         userDao.update(expected);
         actual = userDao.findByUserId(expected.getUserId());
         assertEquals(expected, actual);
+        assertEquals("password2", actual.getPassword());
+        assertEquals("name2", actual.getName());
+        assertEquals("sanjigi@email.com", actual.getEmail());
     }
 
     @Test

@@ -8,7 +8,7 @@ import java.util.List;
 import org.studyStepNext.part7.next.model.User;
 
 public class UserDao {
-    public void insert(User user) throws SQLException {
+    public void insert(User user) {
     	JdbcTemplate jt = new JdbcTemplate();
     	PreparedStatementSetter pss = new PreparedStatementSetter() {
         	public void setValues(PreparedStatement pstmt) throws SQLException{
@@ -21,7 +21,7 @@ public class UserDao {
         jt.update("INSERT INTO USERS VALUES (?, ?, ?, ?)", pss);
     }
 
-    public void update(User user) throws SQLException {
+    public void update(User user) {
     	JdbcTemplate jt = new JdbcTemplate();
     	PreparedStatementSetter pss = new PreparedStatementSetter() {
 			public void setValues(PreparedStatement pstmt) throws SQLException{
@@ -35,7 +35,7 @@ public class UserDao {
 		jt.update("UPDATE Users SET userId = ?, password = ?, name = ?, email = ? where userId = ?", pss);
     }
 
-    public List<User> findAll() throws SQLException {
+    public List<User> findAll() {
     	JdbcTemplate jt = new JdbcTemplate();
     	PreparedStatementSetter pss = new PreparedStatementSetter() {
 			public void setValues(PreparedStatement pstmt) throws SQLException {
@@ -49,7 +49,7 @@ public class UserDao {
 		return jt.query("SELECT userId, password, name, email FROM USERS", pss, rowMapper);
     }
 
-    public User findByUserId(String userId) throws SQLException {
+    public User findByUserId(String userId) {
     	JdbcTemplate jt = new JdbcTemplate();
     	PreparedStatementSetter pss = new PreparedStatementSetter() {
 			public void setValues(PreparedStatement pstmt) throws SQLException {

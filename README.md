@@ -204,6 +204,7 @@ JDBC 실습
 		6) select 리팩토링
 		7) template 통합
 		8) 인터페이스 추가를 통한 mapRow() 문제점 해결
+		9) 런타임 Exception 추가 및 AutoClosable 활용한 자원 반환
 ```
 
 ## 배운 내용들

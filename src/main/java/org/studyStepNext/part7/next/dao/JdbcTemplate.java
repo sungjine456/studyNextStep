@@ -10,14 +10,14 @@ import java.util.List;
 import org.studyStepNext.part7.core.jdbc.ConnectionManager;
 import org.studyStepNext.part7.next.model.User;
 
-public abstract class JdbcTemplate {
-	public void update(String sql) throws SQLException {
+public class JdbcTemplate {
+	public void update(String sql, PreparedStatementSetter pss) throws SQLException {
 		Connection con = null;
         PreparedStatement pstmt = null;
         try {
             con = ConnectionManager.getConnection();
             pstmt = con.prepareStatement(sql);
-            setValues(pstmt);
+            pss.setValues(pstmt);
 
             pstmt.executeUpdate();
         } finally {
@@ -29,20 +29,20 @@ public abstract class JdbcTemplate {
             }
         }
 	}
-	List<User> query(String sql) throws SQLException {
+	List<User> query(String sql, PreparedStatementSetter pss, RowMapper rowMapper) throws SQLException {
 		Connection con = null;
     	PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {
             con = ConnectionManager.getConnection();
             pstmt = con.prepareStatement(sql);
-            setValues(pstmt);
+            pss.setValues(pstmt);
             
             rs = pstmt.executeQuery();
 
             List<User> users = new ArrayList<User>();
             if (rs.next()) {
-                users.add(mapRow(rs));
+                users.add((User) rowMapper.mapRow(rs));
             }
 
             return users;
@@ -58,13 +58,11 @@ public abstract class JdbcTemplate {
             }
         }
 	}
-	User queryForObject(String sql) throws SQLException{
-		List<User> users = query(sql);
+	User queryForObject(String sql, PreparedStatementSetter pss, RowMapper rowMapper) throws SQLException{
+		List<User> users = query(sql, pss, rowMapper);
 		if(users.isEmpty()){
 			return null;
 		}
 		return users.get(0);
 	}
-	abstract User mapRow(ResultSet rs) throws SQLException;
-	abstract void setValues(PreparedStatement pstmt) throws SQLException;
 }

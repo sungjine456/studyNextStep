@@ -202,6 +202,8 @@ JDBC 실습
 		4) InsertTemplate과 UpdateTemplate 합치기
 		5) JdbcTemplate의 User와 의존관계를 끊기
 		6) select 리팩토링
+		7) template 통합
+		8) 인터페이스 추가를 통한 mapRow() 문제점 해결
 ```
 
 ## 배운 내용들

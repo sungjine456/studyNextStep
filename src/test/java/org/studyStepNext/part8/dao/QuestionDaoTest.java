@@ -1,6 +1,5 @@
 package org.studyStepNext.part8.dao;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
@@ -30,8 +29,13 @@ public class QuestionDaoTest {
         QuestionDao qd = new QuestionDao();
         Question question = qd.insert(expected);
         assertEquals(question.getWriter(), "javajigi");
-        question = qd.findById(0);
-        assertEquals(question, notNullValue());
+    }
+    
+    @Test
+    public void findById() throws Exception {
+    	QuestionDao questionDao = new QuestionDao();
+    	Question question = questionDao.findById(2);
+    	assertEquals(question.getWriter(), "김문수");
     }
     
     @Test

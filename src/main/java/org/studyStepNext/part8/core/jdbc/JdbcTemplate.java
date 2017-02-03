@@ -22,9 +22,9 @@ public class JdbcTemplate {
         update(sql, createPreparedStatementSetter(parameters));
     }
     
-    public void update(String sql, PreparedStatement ps, KeyHolder holder) {
+    public void update(PreparedStatementCreator psc, KeyHolder holder) {
         try (Connection conn = ConnectionManager.getConnection()) {
-        	ps = conn.prepareStatement(sql);
+        	PreparedStatement ps = psc.createPreparedStatement(conn);
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();

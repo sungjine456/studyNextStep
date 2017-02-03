@@ -1,5 +1,7 @@
 package org.studyStepNext.part8.next.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -7,6 +9,7 @@ import java.util.List;
 
 import org.studyStepNext.part8.core.jdbc.JdbcTemplate;
 import org.studyStepNext.part8.core.jdbc.KeyHolder;
+import org.studyStepNext.part8.core.jdbc.PreparedStatementCreator;
 import org.studyStepNext.part8.core.jdbc.RowMapper;
 import org.studyStepNext.part8.next.model.Answer;
 
@@ -14,11 +17,20 @@ public class AnswerDao {
 	public Answer insert(Answer answer){
 		JdbcTemplate jt = new JdbcTemplate();
 		String sql = "INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)";
-        jt.update(sql, answer.getWriter(), answer.getContents(), new Timestamp(answer.getCreatedDate().getTime()), 
-        		answer.getQuestionId(), new KeyHolder());
-        Answer a = findById(answer.getAnswerId());
-        System.out.println(a);
-        return a;
+		PreparedStatementCreator psc = new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                PreparedStatement pstmt = con.prepareStatement(sql);
+                pstmt.setString(1, answer.getWriter());
+                pstmt.setString(2, answer.getContents());
+                pstmt.setTimestamp(3, new Timestamp(answer.getCreatedDate().getTime()));
+                pstmt.setInt(4, answer.getQuestionId());
+                return pstmt;
+            }
+        };
+        KeyHolder key = new KeyHolder();
+        jt.update(psc, key);
+        return findById(key.getId());
 	}
 	
 	public Answer findById(int answerId){

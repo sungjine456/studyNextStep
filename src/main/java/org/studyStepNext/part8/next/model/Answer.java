@@ -17,6 +17,13 @@ public class Answer {
 		this.questionId = questionId;
 	}
 
+	public Answer(String writer, String contents, Date createdDate, int questionId){
+		this.writer = writer;
+		this.contents = contents;
+		this.createdDate = createdDate;
+		this.questionId = questionId;
+	}
+
 	public int getAnswerId() {
 		return answerId;
 	}
@@ -46,5 +53,9 @@ public class Answer {
 	}
 	public void setQuestionId(int questionId) {
 		this.questionId = questionId;
+	}
+	
+	public String toString(){
+		return "writer : " + writer + ", contnets : " + contents + ", questionId : " + questionId;
 	}
 }

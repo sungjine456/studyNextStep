@@ -9,6 +9,7 @@ back end
 	2. junit 4.12
 	3. logback 1.1.2
 	4. guava 18.0
+	5. jackson 2.4.4
 ```
 ```
 build tool

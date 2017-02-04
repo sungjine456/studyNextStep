@@ -7,3 +7,16 @@ String.prototype.format = function() {
         ;
   });
 };
+$(".answerWrite input[type=submit].click(addAnswer)");
+function addAnswer(e){
+	e.prventDefault();
+	var queryString = $("form[name=answer]").serialize();
+	$.ajax({
+		type:'post',
+		url:'/api/qna/addAnswer',
+		data:queryString,
+		dataType:'json',
+		error:onError,
+		Success:onSuccess
+	});
+}

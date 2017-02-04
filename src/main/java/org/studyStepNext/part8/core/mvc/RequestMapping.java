@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.studyStepNext.part8.next.controller.AddAnswerController;
 import org.studyStepNext.part8.next.controller.CreateUserController;
 import org.studyStepNext.part8.next.controller.HomeController;
 import org.studyStepNext.part8.next.controller.ListUserController;
@@ -30,6 +30,7 @@ public class RequestMapping {
         mappings.put("/users/create", new CreateUserController());
         mappings.put("/users/updateForm", new UpdateFormUserController());
         mappings.put("/users/update", new UpdateUserController());
+        mappings.put("/api/qna/addAnswer", new AddAnswerController());
 
         logger.info("Initialized Request Mapping!");
     }

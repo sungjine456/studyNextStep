@@ -2,6 +2,7 @@ package org.studyStepNext.part2;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
 public class StringCalculator {
 	public int add(String str) {
@@ -16,18 +17,12 @@ public class StringCalculator {
 	}
 	
 	private int sum(int[] numbers){
-		int sum = 0;
-		for(int number : numbers){
-			sum += number;
-		}
-		return sum;
+		return (int)IntStream.of(numbers).mapToLong(i->i).sum();
 	}
 	
 	private int[] toInts(String[] numbers){
 		int[] iarr = new int[numbers.length];
-		for(int i = 0; i < numbers.length; i++){
-			iarr[i] = parseInt(numbers[i]);
-		}
+		IntStream.range(0, numbers.length).forEach(i->{iarr[i] = parseInt(numbers[i]);});
 		return iarr;
 	}
 	

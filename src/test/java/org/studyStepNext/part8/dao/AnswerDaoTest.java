@@ -45,4 +45,14 @@ public class AnswerDaoTest {
         List<Answer> answers = ad.findAllByQuestionId(7);
         assertEquals(2, answers.size());
     }
+    
+    @Test
+    public void delete() throws Exception {
+    	AnswerDao ad = new AnswerDao();
+        List<Answer> answers = ad.findAllByQuestionId(7);
+        assertEquals(2, answers.size());
+        ad.delete(1);
+        answers = ad.findAllByQuestionId(7);
+        assertEquals(1, answers.size());
+    }
 }

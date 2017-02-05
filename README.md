@@ -219,6 +219,9 @@ JDBC 실습
 		1) Ajax로 데이터를 보낸다.
 		2) 데이터를 저장한 후 JSON형식의 데이터를 다시 보내준다.
 		3) 질문의 ID를 받아 질문을 삭제한다.
+	3. jspView와 jsonView로 분리
+		1) View 인터페이스를 만든다.
+		2) controller의 return type이 View가 되게 수정한다.
 ```
 
 ## 배운 내용들

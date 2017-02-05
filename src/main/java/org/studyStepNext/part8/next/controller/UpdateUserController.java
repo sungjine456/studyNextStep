@@ -5,8 +5,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.studyStepNext.part8.core.mvc.Controller;
+import org.studyStepNext.part8.core.mvc.JspView;
+import org.studyStepNext.part8.core.mvc.View;
 import org.studyStepNext.part8.next.dao.UserDao;
 import org.studyStepNext.part8.next.model.User;
 
@@ -14,7 +15,7 @@ public class UpdateUserController implements Controller {
     private static final Logger log = LoggerFactory.getLogger(UpdateUserController.class);
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+    public View execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         UserDao userDao = new UserDao();
         User user = userDao.findByUserId(req.getParameter("userId"));
         if (!UserSessionUtils.isSameUser(req.getSession(), user)) {
@@ -25,6 +26,6 @@ public class UpdateUserController implements Controller {
                 req.getParameter("email"));
         log.debug("Update User : {}", updateUser);
         user.update(updateUser);
-        return "redirect:/";
+        return new JspView("redirect:/");
     }
 }

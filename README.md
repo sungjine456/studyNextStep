@@ -222,6 +222,7 @@ JDBC 실습
 	3. jspView와 jsonView로 분리
 		1) View 인터페이스를 만든다.
 		2) controller의 return type이 View가 되게 수정한다.
+		3) ModelAndView를 통한 model 추상화
 ```
 
 ## 배운 내용들

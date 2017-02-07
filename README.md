@@ -224,6 +224,9 @@ JDBC 실습
 		2) controller의 return type이 View가 되게 수정한다.
 		3) ModelAndView를 통한 model 추상화
 ```
+###part9
+```
+```
 
 ## 배운 내용들
 ----

@@ -7,6 +7,7 @@ import org.studyStepNext.part9.next.controller.HomeController;
 import org.studyStepNext.part9.next.controller.qna.AddAnswerController;
 import org.studyStepNext.part9.next.controller.qna.DeleteAnswerController;
 import org.studyStepNext.part9.next.controller.qna.ShowController;
+import org.studyStepNext.part9.next.controller.qna.createQuestionFormController;
 import org.studyStepNext.part9.next.controller.user.CreateUserController;
 import org.studyStepNext.part9.next.controller.user.ListUserController;
 import org.studyStepNext.part9.next.controller.user.LoginController;
@@ -35,6 +36,7 @@ public class RequestMapping {
         mappings.put("/users/update", new UpdateUserController());
         mappings.put("/qna/form", new ForwardController("/qna/form.jsp"));
         mappings.put("/qna/show", new ShowController());
+        mappings.put("/qna/create", new createQuestionFormController());
         mappings.put("/api/qna/addAnswer", new AddAnswerController());
         mappings.put("/api/qna/deleteAnswer", new DeleteAnswerController());
 

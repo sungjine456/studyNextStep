@@ -1,5 +1,7 @@
 package org.studyStepNext.part9.next.dao;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -29,4 +31,11 @@ public class QuestionDaoTest {
         log.debug("question : {}", savedQuestion);
     }
 
+    @Test
+    public void addCount() {
+    	QuestionDao questionDao = new QuestionDao();
+    	assertEquals(0, questionDao.findById(1).getCountOfComment());
+    	questionDao.addCount(1);
+    	assertEquals(1, questionDao.findById(1).getCountOfComment());
+    }
 }

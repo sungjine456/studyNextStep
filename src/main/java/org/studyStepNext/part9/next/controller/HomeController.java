@@ -8,7 +8,7 @@ import org.studyStepNext.part9.core.mvc.AbstractController;
 import org.studyStepNext.part9.core.mvc.ModelAndView;
 
 public class HomeController extends AbstractController {
-    private QuestionDao questionDao = new QuestionDao();
+    private QuestionDao questionDao = QuestionDao.getInstance();
 
     @Override
     public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {

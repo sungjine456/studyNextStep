@@ -12,7 +12,7 @@ import org.studyStepNext.part9.next.model.User;
 
 public class createQuestionController extends AbstractController {
 	
-	private QuestionDao questionDao = new QuestionDao();
+	private QuestionDao questionDao = QuestionDao.getInstance();
 
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {

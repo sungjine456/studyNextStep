@@ -14,7 +14,12 @@ import org.studyStepNext.part9.core.jdbc.PreparedStatementCreator;
 import org.studyStepNext.part9.core.jdbc.RowMapper;
 
 public class AnswerDao {
+	private static AnswerDao answerDao = new AnswerDao();
 	private JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
+	private AnswerDao(){}
+	public static AnswerDao getInstance(){
+		return answerDao;
+	}
     public Answer insert(Answer answer) {
         String sql = "INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)";
         PreparedStatementCreator psc = new PreparedStatementCreator() {

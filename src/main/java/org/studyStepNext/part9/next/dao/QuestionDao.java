@@ -14,7 +14,12 @@ import org.studyStepNext.part9.core.jdbc.RowMapper;
 import org.studyStepNext.part9.next.model.Question;
 
 public class QuestionDao {
+	private static QuestionDao questionDao;
 	private JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
+	private QuestionDao(){}
+	public static QuestionDao getInstance() {
+		return questionDao;
+	}
     public Question insert(Question question) {
         String sql = "INSERT INTO QUESTIONS " + 
                 "(writer, title, contents, createdDate) " + 
@@ -75,5 +80,10 @@ public class QuestionDao {
     public void update(Question question) {
         String sql = "UPDATE QUESTIONS set title = ?, contents = ? WHERE questionId = ?";
         jdbcTemplate.update(sql, question.getTitle(), question.getContents(), question.getQuestionId());
+    }
+    
+    public void delete(long questionId){
+    	String sql = "DELETE FROM QUESTIONS WHERE questionId = ?";
+        jdbcTemplate.update(sql, questionId);
     }
 }

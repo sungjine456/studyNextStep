@@ -24,7 +24,7 @@ import org.studyStepNext.part10.next.controller.user.ProfileController;
 import org.studyStepNext.part10.next.controller.user.UpdateFormUserController;
 import org.studyStepNext.part10.next.controller.user.UpdateUserController;
 
-public class RequestMapping {
+public class LegacyHandlerMapping {
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
     private Map<String, Controller> mappings = new HashMap<>();
 

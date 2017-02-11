@@ -237,6 +237,16 @@ JDBC 실습
 		8) 질문 삭제 구현(13번)
 		9) service 클래스 추가를 통한 controller 중복 제거(14번)
 ```
+###part10
+```
+	1. 이전 MVC와 실습할 MVC가 같이 동작할 수 있게 DistapcherServlet 설정
+	2. 자바 Reflection 실습
+		1) 정보 출력해보기
+		2) 메소드 실행
+		3) Annotation이 있는 메소드 실행
+		4) 생성자가 있는 클래스의 인스턴스 생성하기
+		5) private 필드에 접근하기
+```
 
 ## 배운 내용들
 ----

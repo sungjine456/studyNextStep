@@ -1,16 +1,18 @@
-package org.studyStepNext.part9.next.dao;
-
-import org.studyStepNext.part9.next.model.Answer;
+package org.studyStepNext.part10.next.dao;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
-
-import org.studyStepNext.part9.core.jdbc.ConnectionManager;
+import org.studyStepNext.part10.core.jdbc.ConnectionManager;
+import org.studyStepNext.part10.next.model.Answer;
 
 public class AnswerDaoTest {
+    private static final Logger log = LoggerFactory.getLogger(AnswerDaoTest.class);
+
     @Before
     public void setup() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
@@ -24,6 +26,6 @@ public class AnswerDaoTest {
         Answer expected = new Answer("javajigi", "answer contents", questionId);
         AnswerDao dut = AnswerDao.getInstance();
         Answer answer = dut.insert(expected);
-        System.out.println("Answer : " + answer);
+        log.debug("Answer : {}", answer);
     }
 }

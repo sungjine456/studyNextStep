@@ -26,14 +26,14 @@ public class QuestionDaoTest {
     @Test
     public void crud() {
         Question question = new Question("writer", "title", "contents");
-        QuestionDao questionDao = new QuestionDao();
+        QuestionDao questionDao = QuestionDao.getInstance();
         Question savedQuestion = questionDao.insert(question);
         log.debug("question : {}", savedQuestion);
     }
 
     @Test
     public void addCount() {
-    	QuestionDao questionDao = new QuestionDao();
+    	QuestionDao questionDao = QuestionDao.getInstance();
     	assertEquals(0, questionDao.findById(1).getCountOfComment());
     	questionDao.addCount(1);
     	assertEquals(1, questionDao.findById(1).getCountOfComment());

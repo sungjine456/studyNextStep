@@ -10,6 +10,7 @@ back end
 	3. logback 1.1.2
 	4. guava 18.0
 	5. jackson 2.4.4
+	6. reflections 0.9.10
 ```
 ```
 build tool
@@ -246,6 +247,9 @@ JDBC 실습
 		3) Annotation이 있는 메소드 실행
 		4) 생성자가 있는 클래스의 인스턴스 생성하기
 		5) private 필드에 접근하기
+	3. MVC에 Reflection 적용
+		1) @Controller가 설정되어있는 클래스 찾아서 매핑
+		2) LegacyHandler와 AnnotationHandler의 공통점을 추상화
 ```
 
 ## 배운 내용들

@@ -3,8 +3,11 @@ package org.studyStepNext.part10.core.mvc;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.studyStepNext.part10.core.nmvc.HandlerMapping;
 import org.studyStepNext.part10.next.controller.HomeController;
 import org.studyStepNext.part10.next.controller.qna.AddAnswerController;
 import org.studyStepNext.part10.next.controller.qna.ApiDeleteQuestionController;
@@ -24,7 +27,7 @@ import org.studyStepNext.part10.next.controller.user.ProfileController;
 import org.studyStepNext.part10.next.controller.user.UpdateFormUserController;
 import org.studyStepNext.part10.next.controller.user.UpdateUserController;
 
-public class LegacyHandlerMapping {
+public class LegacyHandlerMapping implements HandlerMapping {
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
     private Map<String, Controller> mappings = new HashMap<>();
 
@@ -60,4 +63,9 @@ public class LegacyHandlerMapping {
     void put(String url, Controller controller) {
         mappings.put(url, controller);
     }
+
+	@Override
+	public Object getHandler(HttpServletRequest req) {
+		return mappings.get(req.getRequestURI());
+	}
 }

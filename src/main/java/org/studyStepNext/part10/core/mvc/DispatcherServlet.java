@@ -1,6 +1,7 @@
 package org.studyStepNext.part10.core.mvc;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,22 +12,41 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.studyStepNext.part10.core.nmvc.AnnotationHandlerMapping;
-import org.studyStepNext.part10.core.nmvc.HandlerExecution;
+import org.studyStepNext.part10.core.nmvc.HandlerAdapter;
+import org.studyStepNext.part10.core.nmvc.HandlerExecutionHandlerAdapter;
+import org.studyStepNext.part10.core.nmvc.HandlerMapping;
+
+import com.google.common.collect.Lists;
 
 @WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
-
-    private LegacyHandlerMapping lhm;
-    private AnnotationHandlerMapping ahm;
+    
+    private List<HandlerMapping> mappings = Lists.newArrayList();
+    private List<HandlerAdapter> handlerAdapters = Lists.newArrayList();
 
     @Override
     public void init() throws ServletException {
-        lhm = new LegacyHandlerMapping();
+    	LegacyHandlerMapping lhm = new LegacyHandlerMapping();
         lhm.initMapping();
-        ahm = new AnnotationHandlerMapping("org.studyStepNext.part10.next.controller");
+        AnnotationHandlerMapping ahm = new AnnotationHandlerMapping("org.studyStepNext.part10.next.controller");
         ahm.initialize();
+        
+        mappings.add(lhm);
+        mappings.add(ahm);
+        
+        handlerAdapters.add(new ControllerHandlerAdapter());
+        handlerAdapters.add(new HandlerExecutionHandlerAdapter());
+    }
+    
+    private ModelAndView execute(Object handler, HttpServletRequest req, HttpServletResponse resp) throws Exception{
+    	for(HandlerAdapter handlerAdapter : handlerAdapters){
+    		if(handlerAdapter.supports(handler)){
+    			return handlerAdapter.handler(req, resp, handler);
+    		}
+    	}
+    	return null;
     }
 
     @Override
@@ -34,21 +54,31 @@ public class DispatcherServlet extends HttpServlet {
         String requestUri = req.getRequestURI();
         logger.debug("Method : {}, Request URI : {}", req.getMethod(), requestUri);
 
-        Controller controller = lhm.findController(req.getRequestURI());
+        Object handler = getHandler(req);
+        if (handler == null) {
+            throw new IllegalArgumentException("존재하지 않는 URL입니다.");
+        }
+
         try {
-        	if(controller != null){
-	            render(controller.execute(req, resp), req, resp);
-        	} else {
-        		HandlerExecution he = ahm.getHandler(req);
-        		if(he == null){
-        			throw new ServletException("유효하지 않은 요청입니다.");
-        		}
-        		render(he.handle(req, resp), req, resp);
-        	}
+            ModelAndView mav = execute(handler, req, resp);
+            if (mav != null) {
+                View view = mav.getView();
+                view.render(mav.getModel(), req, resp);
+            }
         } catch (Throwable e) {
             logger.error("Exception : {}", e);
             throw new ServletException(e.getMessage());
         }
+    }
+    
+    private Object getHandler(HttpServletRequest req) {
+        for (HandlerMapping handlerMapping : mappings) {
+            Object handler = handlerMapping.getHandler(req);
+            if (handler != null) {
+                return handler;
+            }
+        }
+        return null;
     }
     
     public void render(ModelAndView mav, HttpServletRequest req, HttpServletResponse resp) throws Exception{

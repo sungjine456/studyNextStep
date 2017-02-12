@@ -10,19 +10,12 @@ import org.studyStepNext.part10.next.model.Question;
 import org.studyStepNext.part10.next.model.User;
 
 public class QnaService {
-    private static QnaService qnaService;
+    private QuestionDao questionDao;
+    private AnswerDao answerDao;
 
-    private QuestionDao questionDao = QuestionDao.getInstance();
-    private AnswerDao answerDao = AnswerDao.getInstance();
-
-    private QnaService() {
-    }
-
-    public static QnaService getInstance() {
-        if (qnaService == null) {
-            qnaService = new QnaService();
-        }
-        return qnaService;
+    public QnaService(QuestionDao questionDao, AnswerDao answerDao) {
+    	this.questionDao = questionDao;
+    	this.answerDao = answerDao;
     }
 
     public Question findById(long questionId) {

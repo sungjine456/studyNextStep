@@ -14,18 +14,7 @@ import org.studyStepNext.part10.core.jdbc.PreparedStatementCreator;
 import org.studyStepNext.part10.core.jdbc.RowMapper;
 
 public class AnswerDao {
-    private static AnswerDao answerDao;
     private JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
-
-    private AnswerDao() {
-    }
-
-    public static AnswerDao getInstance() {
-        if (answerDao == null) {
-            answerDao = new AnswerDao();
-        }
-        return answerDao;
-    }
 
     public Answer insert(Answer answer) {
         String sql = "INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)";

@@ -11,6 +11,7 @@ back end
 	4. guava 18.0
 	5. jackson 2.4.4
 	6. reflections 0.9.10
+	7. mockito 1.10.19
 ```
 ```
 build tool
@@ -250,6 +251,11 @@ JDBC 실습
 	3. MVC에 Reflection 적용
 		1) @Controller가 설정되어있는 클래스 찾아서 매핑
 		2) LegacyHandler와 AnnotationHandler의 공통점을 추상화
+```
+###part11
+```
+	1. 싱글톤 패턴 삭제 후 DI 적용
+	2. Mockito를 활용한 Test
 ```
 
 ## 배운 내용들

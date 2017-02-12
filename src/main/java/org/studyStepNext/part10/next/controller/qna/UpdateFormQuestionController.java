@@ -10,7 +10,11 @@ import org.studyStepNext.part10.core.mvc.AbstractController;
 import org.studyStepNext.part10.core.mvc.ModelAndView;
 
 public class UpdateFormQuestionController extends AbstractController {
-    private QuestionDao questionDao = QuestionDao.getInstance();
+private QuestionDao questionDao;
+    
+    public UpdateFormQuestionController(QuestionDao questionDao) {
+		this.questionDao = questionDao;
+	}
 
     @Override
     public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) throws Exception {

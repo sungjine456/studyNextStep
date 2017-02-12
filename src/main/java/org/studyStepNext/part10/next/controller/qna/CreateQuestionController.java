@@ -11,7 +11,11 @@ import org.studyStepNext.part10.core.mvc.AbstractController;
 import org.studyStepNext.part10.core.mvc.ModelAndView;
 
 public class CreateQuestionController extends AbstractController {
-    private QuestionDao questionDao = QuestionDao.getInstance();
+private QuestionDao questionDao;
+    
+    public CreateQuestionController(QuestionDao questionDao) {
+		this.questionDao = questionDao;
+	}
 
     @Override
     public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {

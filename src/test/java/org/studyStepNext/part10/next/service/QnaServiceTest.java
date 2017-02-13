@@ -1,8 +1,11 @@
 package org.studyStepNext.part10.next.service;
 
-import static org.studyStepNext.part10.next.model.UserTest.newUser;
-import static org.studyStepNext.part10.next.model.QuestionTest.newQuestion;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.studyStepNext.part10.next.model.UserTest.newUser;
+
+import java.util.Date;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,9 +15,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.studyStepNext.part10.next.CannotDeleteException;
 import org.studyStepNext.part10.next.dao.AnswerDao;
 import org.studyStepNext.part10.next.dao.QuestionDao;
+import org.studyStepNext.part10.next.model.Answer;
 import org.studyStepNext.part10.next.model.Question;
-
-import com.google.common.collect.Lists;
+import org.studyStepNext.part10.next.model.User;
 
 @RunWith(MockitoJUnitRunner.class)
 public class QnaServiceTest {
@@ -22,27 +25,46 @@ public class QnaServiceTest {
 	private QuestionDao questionDao;
 	@Mock
 	private AnswerDao answerDao;
-	
 	private QnaService qnaService;
+	private User user;
 	
 	@Before
 	public void setup(){
+		user = newUser("testUser");
 		qnaService = new QnaService(questionDao, answerDao);
 	}
 	
-	@Test(expected = CannotDeleteException.class)
-	public void deleteQuestion_NoneQuestion() throws Exception {
+	@Test(expected=CannotDeleteException.class)
+	public void deletQuestion_noneQuestion()throws Exception{
 		when(questionDao.findById(1L)).thenReturn(null);
 		
-		qnaService.deleteQuestion(1L, newUser("userId"));
+		qnaService.deleteQuestion(1L, user);
 	}
 	
 	@Test
-	public void deleteQuestion_sameUser_noneAnswer() throws Exception{
-		Question question = newQuestion(1L, "test");
+	public void canDeleteQuestion() throws Exception {
+		Question question = new Question(1L, user.getUserId(), "title", "contents", new Date(), 0) {
+			@Override
+			public boolean canDelete(User user, List<Answer> answers) throws CannotDeleteException {
+				return true;
+			}
+		};
 		when(questionDao.findById(1L)).thenReturn(question);
-		when(answerDao.findAllByQuestionId(1L)).thenReturn(Lists.newArrayList());
 		
-		qnaService.deleteQuestion(1L, newUser("test"));
+		qnaService.deleteQuestion(1L, newUser("userId"));
+		verify(questionDao).delete(question.getQuestionId());
+	}
+	
+	@Test(expected=CannotDeleteException.class)
+	public void cannotDeleteQuestion() throws Exception {
+		Question question = new Question(1L, user.getUserId(), "title", "contents", new Date(), 0) {
+			@Override
+			public boolean canDelete(User user, List<Answer> answers) throws CannotDeleteException {
+				throw new CannotDeleteException("삭제할 수 없음");
+			}
+		};
+		when(questionDao.findById(1L)).thenReturn(question);
+		
+		qnaService.deleteQuestion(1L, newUser("userId"));
 	}
 }

@@ -48,6 +48,10 @@ public class Answer {
     public long getQuestionId() {
         return questionId;
     }
+    
+    public boolean canDelete(User user){
+    	return user.isSameUser(writer);
+    }
 
     @Override
     public int hashCode() {

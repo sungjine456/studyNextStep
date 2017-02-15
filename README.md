@@ -258,6 +258,7 @@ JDBC 실습
 	2. Mockito를 활용한 Test
 	3. DI를 객체지향 적으로 수정 연습
 	4. qnaService에 적용
+	5. DI Framework 실습
 ```
 
 ## 배운 내용들

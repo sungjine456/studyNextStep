@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.studyStepNext.part11.core.annotation.RequestMapping;
 import org.studyStepNext.part11.core.annotation.RequestMethod;
+import org.studyStepNext.part11.core.di.factory.BeanFactory;
+import org.studyStepNext.part11.core.di.factory.BeanScanner;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -27,10 +29,12 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     }
 
     public void initialize() {
-        ControllerScanner controllerScanner = new ControllerScanner(basePackage);
-        Map<Class<?>, Object> controllers = controllerScanner.getControllers();
-        Set<Method> methods = getRequestMappingMethods(controllers.keySet());
-        for (Method method : methods) {
+    	BeanScanner scanner = new BeanScanner(basePackage);
+		BeanFactory beanFactory = new BeanFactory(scanner.scan());
+		beanFactory.initialize();
+		Map<Class<?>, Object> controllers = beanFactory.getControllers();
+		Set<Method> methods = getRequestMappingMethods(controllers.keySet());
+		for (Method method : methods) {
             RequestMapping rm = method.getAnnotation(RequestMapping.class);
             logger.debug("register handlerExecution : url is {}, method is {}", rm.value(), method);
             handlerExecutions.put(createHandlerKey(rm),

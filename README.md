@@ -260,6 +260,10 @@ JDBC 실습
 	4. qnaService에 적용
 	5. DI Framework 실습
 ```
+###part12
+```
+	1. @Inject를 setter와 생성자와 Field에서 사용 가능하게 수정
+```
 
 ## 배운 내용들
 ----

@@ -26,7 +26,12 @@ DVCS
 	1. Git
 ```
 
-## 2독 진행 순서
+## 2독 진행
 ----
 
 ### 3장
+```
+	1. index.html 응답하기
+		1) index.html로 페이지 이동
+		2) url을 구하는 private 메소드 작성 후 reflection을 사용하여 테스트
+```

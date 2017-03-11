@@ -35,7 +35,7 @@ public class RequestHandler extends Thread {
         		BufferedReader br = new BufferedReader(new InputStreamReader(in));) {
         	String line = br.readLine();
         	String url = getUrl(line);
-        	
+        	System.out.println("url : " + url);
         	int contentLength = 0;
             while(line != null && !"".equals(line)){
             	log.debug(line);
@@ -48,8 +48,15 @@ public class RequestHandler extends Thread {
             User user = getUser(IOUtils.readData(br, contentLength));
             
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = makeBody(url);
-            response200Header(dos, body.length);
+            byte[] body = null;
+            System.out.println(url);
+            if("/user/create".equals(url)){
+            	body = makeBody("/index.html");
+            	response302Header(dos);
+            } else {
+            	body = makeBody(url);
+            	response200Header(dos, body.length);
+            }
             responseBody(dos, body);
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -66,6 +73,16 @@ public class RequestHandler extends Thread {
             log.error(e.getMessage());
         }
     }
+    
+	private void response302Header(DataOutputStream dos) {
+		try {
+			dos.writeBytes("HTTP/1.1 302 Found \r\n");
+			dos.writeBytes("Location: /index.html");
+			dos.writeBytes("\r\n");
+		} catch (IOException e) {
+			log.error(e.getMessage());
+		}
+	}
 
     private void responseBody(DataOutputStream dos, byte[] body) {
         try {

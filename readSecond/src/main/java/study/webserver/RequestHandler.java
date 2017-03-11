@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import study.model.User;
 import study.util.HttpRequestUtils;
+import study.util.IOUtils;
 
 public class RequestHandler extends Thread {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
@@ -34,13 +35,18 @@ public class RequestHandler extends Thread {
         		BufferedReader br = new BufferedReader(new InputStreamReader(in));) {
         	String line = br.readLine();
         	String url = getUrl(line);
-        	int index = url.indexOf("?");
-        	User user = getUser(url.substring(index+1));
         	
+        	int contentLength = 0;
             while(line != null && !"".equals(line)){
             	log.debug(line);
+            	if(line.startsWith("Content-Length")){
+            		contentLength = Integer.parseInt(HttpRequestUtils.parseHeader(line).getValue());
+            	}
             	line = br.readLine();
             }
+            
+            User user = getUser(IOUtils.readData(br, contentLength));
+            
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = makeBody(url);
             response200Header(dos, body.length);

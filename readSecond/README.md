@@ -34,4 +34,5 @@ DVCS
 	1. index.html 응답하기
 		1) index.html로 페이지 이동
 		2) url을 구하는 private 메소드 작성 후 reflection을 사용하여 테스트
+		3) get 방식으로 회원가입
 ```

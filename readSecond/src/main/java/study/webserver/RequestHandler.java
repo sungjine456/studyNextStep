@@ -85,11 +85,25 @@ public class RequestHandler extends Thread {
             	} else {
                 	response302Header(dos, "/index.html");
             	}
+        	} else if(url.endsWith(".css")){
+        		body = makeBody(url);
+        		response200CssHeader(dos, body.length);
         	} else {
         		body = makeBody(url);
             	response200Header(dos, body.length);
             }
             responseBody(dos, body);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+    
+    private void response200CssHeader(DataOutputStream dos, int lengthOfBodyContent) {
+        try {
+            dos.writeBytes("HTTP/1.1 200 OK \r\n");
+            dos.writeBytes("Content-Type: text/css\r\n");
+            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("\r\n");
         } catch (IOException e) {
             log.error(e.getMessage());
         }

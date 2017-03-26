@@ -48,13 +48,13 @@ public class RequestHandler extends Thread {
             	if(line.startsWith("Cookie")){
             		Map<String, String> params = HttpRequestUtils.parseCookies(line.split(": ")[1]);
             		if(params.containsKey("logined")){
-            			isLogined = Boolean.valueOf(params.get("logined"));
+            			isLogined = Boolean.parseBoolean(params.get("logined"));
             		}
             	}
             	line = br.readLine();
             }
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = makeBody("/index.html");
+            byte[] body = makeBody(url);
             if("/user/create".equals(url)){
             	DataBase.addUser(getUser(IOUtils.readData(br, contentLength)));
             	response302Header(dos, "/index.html");
@@ -62,10 +62,10 @@ public class RequestHandler extends Thread {
             	User loginUser = getUser(IOUtils.readData(br, contentLength));
             	User findUser = DataBase.findUserById(loginUser.getUserId());
             	if(loginUser != null && findUser != null && findUser.getPassword().equals(loginUser.getPassword())){
-            		resposnse200CookieHeader(dos, body.length, true);
+            		resposnse302CookieHeader(dos, true, "/index.html");
             	} else {
             		body = makeBody("/user/login_failed.html");
-            		resposnse200CookieHeader(dos, body.length, false);
+            		resposnse302CookieHeader(dos, true, "/index.html");
             	}
             } else if("/user/list".equals(url)){
             	if(isLogined){
@@ -80,16 +80,13 @@ public class RequestHandler extends Thread {
             			sb.append("</TR>");
             		}
             		sb.append("</TABLE></BODY></HTML>");
-            		body = sb.toString().getBytes();
-            		response200Header(dos, body.length);
+            		response302Header(dos, "/index.html");
             	} else {
                 	response302Header(dos, "/index.html");
             	}
         	} else if(url.endsWith(".css")){
-        		body = makeBody(url);
         		response200CssHeader(dos, body.length);
         	} else {
-        		body = makeBody(url);
             	response200Header(dos, body.length);
             }
             responseBody(dos, body);
@@ -109,11 +106,11 @@ public class RequestHandler extends Thread {
         }
     }
     
-    private void resposnse200CookieHeader(DataOutputStream dos, int lengthOfBodyContent, boolean isLoginSuccess) {
+    private void resposnse302CookieHeader(DataOutputStream dos, boolean isLoginSuccess, String url) {
     	try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
             dos.writeBytes("Set-Cookie: logined=" + isLoginSuccess + "\r\n");
+            dos.writeBytes("Location: " + url);
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             log.error(e.getMessage());

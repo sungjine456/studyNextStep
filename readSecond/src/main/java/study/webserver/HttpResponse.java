@@ -27,8 +27,10 @@ public class HttpResponse {
 		try {
 			byte[] body = Files.readAllBytes(new File("./webapp" + url).toPath());
 			
-			response200Header(body.length);
+			dos.writeBytes("HTTP/1.1 200 OK \r\n");
+			processHeaders();
 			forwardBody(url);
+			response200Header(body.length);
 			
 			responseBody(body);
 		} catch (IOException e) {
@@ -67,7 +69,6 @@ public class HttpResponse {
 
 	private void response200Header(int lengthOfBodyContent) {
 		try {
-			dos.writeBytes("HTTP/1.1 200 OK \r\n");
 			dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
 			dos.writeBytes("\r\n");
 		} catch (IOException e) {

@@ -43,7 +43,7 @@ public class RequestHandler extends Thread {
         	}
         	
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = makeBody(url);
+            byte[] body = makeBody("/index.html");
             if("/user/create".equals(url)){
             	DataBase.addUser(getUser(req));
             	response302Header(dos, "/index.html");
@@ -54,7 +54,7 @@ public class RequestHandler extends Thread {
             		resposnse302CookieHeader(dos, true, "/index.html");
             	} else {
             		body = makeBody("/user/login_failed.html");
-            		resposnse302CookieHeader(dos, true, "/index.html");
+            		resposnse302CookieHeader(dos, true, "/user/login_failed.html");
             	}
             } else if("/user/list".equals(url)){
             	if(isLogined){
@@ -74,8 +74,10 @@ public class RequestHandler extends Thread {
                 	response302Header(dos, "/index.html");
             	}
         	} else if(url.endsWith(".css")){
+        		body = makeBody(url);
         		response200CssHeader(dos, body.length);
         	} else {
+        		body = makeBody(url);
             	response200Header(dos, body.length);
             }
             responseBody(dos, body);

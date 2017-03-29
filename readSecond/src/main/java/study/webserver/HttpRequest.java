@@ -9,6 +9,7 @@ import java.util.Map;
 
 import study.util.HttpRequestUtils;
 import study.util.HttpRequestUtils.Pair;
+import study.util.IOUtils;
 
 public class HttpRequest {
 	private BufferedReader br;
@@ -35,7 +36,7 @@ public class HttpRequest {
 				line = br.readLine();
 			}
 			if(method.equals("POST")){
-				parameters = HttpRequestUtils.parseQueryString(br.readLine());
+				parameters = HttpRequestUtils.parseQueryString(IOUtils.readData(br, Integer.parseInt(headers.get("Content-Length"))));
 			}
 		} catch(IOException e){
 			e.printStackTrace();

@@ -18,6 +18,8 @@ public class HttpRequest {
 	private Map<String, String> headers = new HashMap<>();
 	private Map<String, String> parameters = new HashMap<>();
 	
+	public HttpRequest(){}
+	
 	public HttpRequest(InputStream in) {
 		br = new BufferedReader(new InputStreamReader(in));
 		try {

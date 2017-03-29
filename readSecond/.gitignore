@@ -3,4 +3,6 @@
 /.settings/
 .classpath
 .project
-/build/
+/src/test/resources/Http_Forward.txt
+/src/test/resources/Http_Cookie.txt
+/src/test/resources/Http_Redirect.txt

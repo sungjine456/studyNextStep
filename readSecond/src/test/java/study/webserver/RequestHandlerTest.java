@@ -4,8 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,31 +27,38 @@ public class RequestHandlerTest {
 	}
 	
 	@Test
-	public void test() throws Exception {
-		String line = "GET /index.html Http/1.1";
-		Method method = clazz.getDeclaredMethod("getUrl", String.class);
-		method.setAccessible(true);
-		String result = (String)method.invoke(requestHandler, line);
-		assertEquals(result, "/index.html");
-	}
-	
-	@Test
 	public void getUserTest() throws Exception {
-		Method method = clazz.getDeclaredMethod("getUser", String.class);
+		Class<HttpRequest> httpRequestClazz = HttpRequest.class;
+		Constructor<HttpRequest> httpRequestCon = httpRequestClazz.getConstructor(new Class[]{});
+		HttpRequest httpRequest = httpRequestCon.newInstance();
+		
+		Field httpRequestParametersField = httpRequestClazz.getDeclaredField("parameters");
+		httpRequestParametersField.setAccessible(true);
+		
+		Map<String, String> map = new HashMap<>();
+		map.put("userId", "testId");
+		map.put("password", "password");
+		
+		httpRequestParametersField.set(httpRequest, map);
+		
+		Method method = clazz.getDeclaredMethod("getUser", HttpRequest.class);
 		method.setAccessible(true);
 		
-		String line = "userId=javajigi&password=password2";
-		User result = (User)method.invoke(requestHandler, line);
-		assertEquals(result.getUserId(), "javajigi");
-		assertEquals(result.getPassword(), "password2");
+		User result = (User)method.invoke(requestHandler, httpRequest);
+		assertEquals(result.getUserId(), "testId");
+		assertEquals(result.getPassword(), "password");
 		assertNull(result.getEmail());
 		assertNull(result.getName());
 		
-		line = "userId=javajigi&password=password2&name=c&email=a%40com";
-		result = (User)method.invoke(requestHandler, line);
-		assertEquals(result.getUserId(), "javajigi");
-		assertEquals(result.getPassword(), "password2");
-		assertEquals(result.getEmail(), "a%40com");
-		assertEquals(result.getName(), "c");
+		map.put("name", "testName");
+		map.put("email", "test@email.com");
+		
+		httpRequestParametersField.set(httpRequest, map);
+		
+		result = (User)method.invoke(requestHandler, httpRequest);
+		assertEquals(result.getUserId(), "testId");
+		assertEquals(result.getPassword(), "password");
+		assertEquals(result.getEmail(), "test@email.com");
+		assertEquals(result.getName(), "testName");
 	}
 }

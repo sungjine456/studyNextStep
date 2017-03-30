@@ -37,6 +37,19 @@ public class HttpResponse {
 			log.error(e.getMessage());
 		}
 	}
+	
+	public void forward(byte[] body) {
+		try {
+			dos.writeBytes("HTTP/1.1 200 OK \r\n");
+			processHeaders();
+			forwardBody("");
+			response200Header(body.length);
+			
+			responseBody(body);
+		} catch (IOException e) {
+			log.error(e.getMessage());
+		}
+	}
 
 	public void sendRedirect(String url) {
 		try {

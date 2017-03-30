@@ -1,4 +1,4 @@
-package study.webserver;
+package study.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNull;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,16 +13,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 import study.model.User;
+import study.webserver.HttpRequest;
 
-public class RequestHandlerTest {
-	private Class<RequestHandler> clazz; 
-	private RequestHandler requestHandler;
+public class MyUtilsTest {
+	private Class<MyUtils> clazz; 
+	private MyUtils myUtils;
 	
 	@Before
 	public void setup() throws Exception {
-		clazz = RequestHandler.class;
-		Constructor<?> con = clazz.getConstructor(new Class[]{Socket.class});
-		requestHandler = (RequestHandler)con.newInstance(new Socket());
+		clazz = MyUtils.class;
+		Constructor<?> con = clazz.getConstructor(new Class[]{});
+		myUtils = (MyUtils)con.newInstance();
 	}
 	
 	@Test
@@ -44,7 +44,7 @@ public class RequestHandlerTest {
 		Method method = clazz.getDeclaredMethod("getUser", HttpRequest.class);
 		method.setAccessible(true);
 		
-		User result = (User)method.invoke(requestHandler, httpRequest);
+		User result = (User)method.invoke(myUtils, httpRequest);
 		assertEquals(result.getUserId(), "testId");
 		assertEquals(result.getPassword(), "password");
 		assertNull(result.getEmail());
@@ -55,7 +55,7 @@ public class RequestHandlerTest {
 		
 		httpRequestParametersField.set(httpRequest, map);
 		
-		result = (User)method.invoke(requestHandler, httpRequest);
+		result = (User)method.invoke(myUtils, httpRequest);
 		assertEquals(result.getUserId(), "testId");
 		assertEquals(result.getPassword(), "password");
 		assertEquals(result.getEmail(), "test@email.com");

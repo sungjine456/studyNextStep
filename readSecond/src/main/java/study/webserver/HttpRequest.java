@@ -26,10 +26,14 @@ public class HttpRequest {
 			String line = br.readLine();
 			String[] lineSplit = line.split(" ");
 			method = lineSplit[0];
-			String[] pathSplit = lineSplit[1].split("\\?");
-			path = pathSplit[0];
-			if(pathSplit.length>1){
-				parameters = HttpRequestUtils.parseQueryString(pathSplit[1]);
+			if(HttpMethod.valueOf(method).isPost()){
+				path = lineSplit[1];
+			} else {
+				String[] pathSplit = lineSplit[1].split("\\?");
+				path = pathSplit[0];
+				if(pathSplit.length>1){
+					parameters = HttpRequestUtils.parseQueryString(pathSplit[1]);
+				}
 			}
 			line = br.readLine();
 			while(line != null && !"".equals(line)){
@@ -37,7 +41,7 @@ public class HttpRequest {
 				headers.put(pair.getKey(), pair.getValue());
 				line = br.readLine();
 			}
-			if(method.equals("POST")){
+			if(HttpMethod.valueOf(method).isPost()){
 				parameters = HttpRequestUtils.parseQueryString(IOUtils.readData(br, Integer.parseInt(headers.get("Content-Length"))));
 			}
 		} catch(IOException e){

@@ -1,12 +1,13 @@
 package study.controller;
 
+import study.webserver.HttpMethod;
 import study.webserver.HttpRequest;
 import study.webserver.HttpResponse;
 
 public abstract class AbstractController implements Controller {
 	public void service(HttpRequest req, HttpResponse res){
 		String method = req.getMethod();
-		if("POST".equals(method)){
+		if(HttpMethod.valueOf(method).isPost()){
 			doPost(req, res);
 		} else {
 			doGet(req,res);

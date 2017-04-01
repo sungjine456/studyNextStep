@@ -8,20 +8,24 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.servlet.http.HttpSession;
 
 import study.core.db.DataBase;
+import study.next.model.User;
 
 @WebServlet("/updateUserForm")
 public class UpdateUserFormServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = LoggerFactory.getLogger(UpdateUserFormServlet.class);
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		log.debug(req.getParameter("userId"));
+		HttpSession session = req.getSession();
+    	User user = (User)session.getAttribute("user");
+    	if(user == null || user.getUserId().equals(req.getParameter("userId"))){
+    		RequestDispatcher rd = req.getRequestDispatcher("/index.html");
+            rd.forward(req, resp);
+            return;
+    	}
 		req.setAttribute("user", DataBase.findUserById(req.getParameter("userId")));
 		RequestDispatcher rd = req.getRequestDispatcher("/user/update.jsp");
         rd.forward(req, resp);

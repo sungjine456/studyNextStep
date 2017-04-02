@@ -21,7 +21,7 @@ public class UpdateUserServlet extends HttpServlet {
 		HttpSession session = req.getSession();
     	User user = (User)session.getAttribute("user");
     	if(user == null || user.getUserId().equals(req.getParameter("userId"))){
-    		RequestDispatcher rd = req.getRequestDispatcher("/index.html");
+    		RequestDispatcher rd = req.getRequestDispatcher("/index.jsp");
             rd.forward(req, resp);
             return;
     	}

@@ -28,6 +28,24 @@ public class User {
     public String getEmail() {
         return email;
     }
+    
+    public void update(User updateUser) {
+        this.password = updateUser.password;
+        this.name = updateUser.name;
+        this.email = updateUser.email;
+    }
+
+    public boolean matchPassword(String password) {
+        if (password == null) {
+            return false;
+        }
+
+        return this.password.equals(password);
+    }
+
+    public boolean isSameUser(User user) {
+        return userId.equals(user.userId);
+    }
 
     @Override
     public int hashCode() {
@@ -66,4 +84,8 @@ public class User {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "User [userId=" + userId + ", name=" + name + ", email=" + email + "]";
+    }
 }

@@ -1,5 +1,7 @@
 package study.next.web;
 
+import java.sql.SQLException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -7,8 +9,8 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import study.core.db.DataBase;
 import study.core.mvc.Controller;
+import study.next.dao.UserDao;
 import study.next.model.User;
 
 public class ListUserController implements Controller {
@@ -22,7 +24,12 @@ public class ListUserController implements Controller {
     		return "redirect:/";
     	}
     	log.info("User not null");
-        req.setAttribute("users", DataBase.findAll());
+    	UserDao userDao = new UserDao();
+        try {
+			req.setAttribute("users", userDao.findAll());
+		} catch (SQLException e) {
+			log.error(e.getMessage());
+		}
         return "/user/list.jsp";
     }
 }

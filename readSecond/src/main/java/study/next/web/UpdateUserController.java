@@ -1,5 +1,7 @@
 package study.next.web;
 
+import java.sql.SQLException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -7,8 +9,8 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import study.core.db.DataBase;
 import study.core.mvc.Controller;
+import study.next.dao.UserDao;
 import study.next.model.User;
 
 public class UpdateUserController implements Controller {
@@ -24,7 +26,12 @@ public class UpdateUserController implements Controller {
     	log.info("is user session");
 		User updateUser = new User(req.getParameter("userId"), req.getParameter("password"), req.getParameter("name"),
                 req.getParameter("email"));
-		DataBase.addUser(updateUser);
+		UserDao userDao = new UserDao();
+		try {
+			userDao.update(updateUser);
+		} catch (SQLException e) {
+			log.error(e.getMessage());
+		}
 		return "redirect:/user/list";
 	}
 }

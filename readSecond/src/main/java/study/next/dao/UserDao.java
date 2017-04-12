@@ -8,54 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import study.core.jdbc.ConnectionManager;
+import study.core.jdbc.InsertJdbcTemplate;
+import study.core.jdbc.UpdateJdbcTemplate;
 import study.next.model.User;
 
 public class UserDao {
     public void insert(User user) throws SQLException {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        try {
-            con = ConnectionManager.getConnection();
-            String sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
-            pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, user.getUserId());
-            pstmt.setString(2, user.getPassword());
-            pstmt.setString(3, user.getName());
-            pstmt.setString(4, user.getEmail());
-
-            pstmt.executeUpdate();
-        } finally {
-            if (pstmt != null) {
-                pstmt.close();
-            }
-
-            if (con != null) {
-                con.close();
-            }
-        }
+        InsertJdbcTemplate insertJdbcTemplate = new InsertJdbcTemplate();
+        insertJdbcTemplate.insert(user, this);
     }
     
     public void update(User user) throws SQLException {
-    	Connection con = null;
-        PreparedStatement pstmt = null;
-        try {
-            con = ConnectionManager.getConnection();
-            String sql = "UPDATE USERS set password = ?, name = ?, email = ? WHERE userId = ?";
-            pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, user.getPassword());
-            pstmt.setString(2, user.getName());
-            pstmt.setString(3, user.getEmail());
-            pstmt.setString(4, user.getUserId());
-
-            pstmt.executeUpdate();
-        } finally {
-            if (pstmt != null) {
-                pstmt.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
+    	UpdateJdbcTemplate updateJdbcTemplate = new UpdateJdbcTemplate();
+    	updateJdbcTemplate.update(user, this);
     }
 
     public List<User> findAll() throws SQLException {
@@ -119,5 +84,31 @@ public class UserDao {
                 con.close();
             }
         }
+    }
+    
+    public void setValuesForInsert(User user, PreparedStatement pstmt) throws SQLException {
+    	pstmt.setString(1, user.getUserId());
+        pstmt.setString(2, user.getPassword());
+        pstmt.setString(3, user.getName());
+        pstmt.setString(4, user.getEmail());
+
+        pstmt.executeUpdate();
+    }
+    
+    public void setValuesForUpdate(User user, PreparedStatement pstmt) throws SQLException {
+    	pstmt.setString(1, user.getPassword());
+        pstmt.setString(2, user.getName());
+        pstmt.setString(3, user.getEmail());
+        pstmt.setString(4, user.getUserId());
+
+        pstmt.executeUpdate();
+    }
+    
+    public String createQueryForInsert(){
+    	return "INSERT INTO USERS VALUES (?, ?, ?, ?)";
+    }
+
+    public String createQueryForUpdate(){
+    	return "UPDATE USERS set password = ?, name = ?, email = ? WHERE userId = ?";
     }
 }

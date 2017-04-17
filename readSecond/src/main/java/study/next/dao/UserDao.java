@@ -45,9 +45,9 @@ public class UserDao {
 			public void setValues(PreparedStatement pstmt) throws SQLException {
 			}
     	};
-    	RowMapper rowMapper = new RowMapper(){
+    	RowMapper<List<User>> rowMapper = new RowMapper<List<User>>(){
 			@Override
-			public Object mapRow(ResultSet rs) throws SQLException {
+			public List<User> mapRow(ResultSet rs) throws SQLException {
 				List<User> users = new ArrayList<>();
 	            if (rs.next()) {
 	                users.add(new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
@@ -67,9 +67,9 @@ public class UserDao {
 	            pstmt.setString(1, userId);
 			}
     	};
-    	RowMapper rowMapper = new RowMapper(){
+    	RowMapper<User> rowMapper = new RowMapper<User>(){
 			@Override
-			public Object mapRow(ResultSet rs) throws SQLException {
+			public User mapRow(ResultSet rs) throws SQLException {
 	            User user = null;
 	            if (rs.next()) {
 	                user = new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),

@@ -12,6 +12,7 @@ public class JdbcTemplate {
 	public void update(String query, PreparedStatementSetter pss) throws DataAccessException {
         try(Connection con = ConnectionManager.getConnection();
         		PreparedStatement pstmt = con.prepareStatement(query)) {
+        	
             pss.setValues(pstmt);
             
             pstmt.executeUpdate();
@@ -20,10 +21,15 @@ public class JdbcTemplate {
         }
 	}
 	
-	public List<User> query(String query, PreparedStatementSetter pss, RowMapper<List<User>> rowMapper) throws DataAccessException {
+	public void update(String query, Object...values){
+		update(query, createPreparedStatementSetter(values));
+	}
+	
+	public List<User> query(String query, RowMapper<List<User>> rowMapper, PreparedStatementSetter pss) throws DataAccessException {
         ResultSet rs = null;
         try(Connection con = ConnectionManager.getConnection();
         		PreparedStatement pstmt = con.prepareStatement(query)) {
+        	
             pss.setValues(pstmt);
             
             rs = pstmt.executeQuery();
@@ -42,10 +48,15 @@ public class JdbcTemplate {
         }
 	}
 	
-	public User queryForObject(String query, PreparedStatementSetter pss, RowMapper<User> rowMapper) throws DataAccessException {
+	public List<User> query(String query, RowMapper<List<User>> rowMapper, Object...values) throws DataAccessException {
+		return query(query, rowMapper, createPreparedStatementSetter(values));
+	}
+	
+	public User queryForObject(String query, RowMapper<User> rowMapper, PreparedStatementSetter pss) throws DataAccessException {
         ResultSet rs = null;
         try(Connection con = ConnectionManager.getConnection();
         		PreparedStatement pstmt = con.prepareStatement(query)) {
+        	
             pss.setValues(pstmt);
             
             rs = pstmt.executeQuery();
@@ -62,5 +73,21 @@ public class JdbcTemplate {
 				}
             }
         }
+	}
+	
+	public User queryForObject(String query, RowMapper<User> rowMapper, Object...values) throws DataAccessException {
+		return queryForObject(query, rowMapper, createPreparedStatementSetter(values));
+	}
+	
+	private PreparedStatementSetter createPreparedStatementSetter(Object...objects){
+		PreparedStatementSetter pstmts = new PreparedStatementSetter() {
+			@Override
+			public void setValues(PreparedStatement pstmt) throws SQLException {
+				for(int i = 0; i < objects.length; i++){
+					pstmt.setObject(i+1, objects[i]);
+				}
+			}
+		};
+		return pstmts;
 	}
 }

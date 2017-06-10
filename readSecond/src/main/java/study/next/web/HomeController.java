@@ -7,14 +7,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import study.core.mvc.Controller;
+import study.next.dao.QuestionDao;
 
 public class HomeController implements Controller {
 	private static final Logger log = LoggerFactory.getLogger(HomeController.class);
 	
+	QuestionDao questionDao = new QuestionDao();
+	
 	@Override
 	public String execute(HttpServletRequest req, HttpServletResponse res) {
 		log.info("HomeController");
-		
-		return "/index.jsp";
+		req.setAttribute("questions", questionDao.findAll());
+		return "/home.jsp";
 	}
 }

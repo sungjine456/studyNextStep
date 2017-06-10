@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import study.next.web.HomeController;
+import study.next.web.qna.ShowController;
 import study.next.web.user.CreateUserController;
 import study.next.web.user.ListUserController;
 import study.next.web.user.LoginController;
@@ -23,6 +24,7 @@ public class RequestMapping {
 		mappingUrl.put("/user/create", new CreateUserController());
 		mappingUrl.put("/users/update", new UpdateUserController());
 		mappingUrl.put("/users/updateForm", new UpdateUserFormController());
+		mappingUrl.put("/qna/show", new ShowController());
 	}
 	
 	public Controller findController(String url){

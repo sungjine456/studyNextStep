@@ -4,11 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-import study.next.model.User;
-
-public class JdbcTemplate {
+public class JdbcTemplate<T> {
 	public void update(String query, PreparedStatementSetter pss) throws DataAccessException {
         try(Connection con = ConnectionManager.getConnection();
         		PreparedStatement pstmt = con.prepareStatement(query)) {
@@ -25,7 +24,7 @@ public class JdbcTemplate {
 		update(query, createPreparedStatementSetter(values));
 	}
 	
-	public List<User> query(String query, RowMapper<List<User>> rowMapper, PreparedStatementSetter pss) throws DataAccessException {
+	public List<T> query(String query, RowMapper<T> rowMapper, PreparedStatementSetter pss) throws DataAccessException {
         ResultSet rs = null;
         try(Connection con = ConnectionManager.getConnection();
         		PreparedStatement pstmt = con.prepareStatement(query)) {
@@ -33,8 +32,11 @@ public class JdbcTemplate {
             pss.setValues(pstmt);
             
             rs = pstmt.executeQuery();
-            
-            return (List<User>)rowMapper.mapRow(rs);
+            List<T> list = new ArrayList<T>();
+            while (rs.next()) {
+                list.add(rowMapper.mapRow(rs));
+            }
+            return list;
         } catch(SQLException e){
         	throw new DataAccessException(e);
         } finally {
@@ -48,11 +50,11 @@ public class JdbcTemplate {
         }
 	}
 	
-	public List<User> query(String query, RowMapper<List<User>> rowMapper, Object...values) throws DataAccessException {
+	public List<T> query(String query, RowMapper<T> rowMapper, Object...values) throws DataAccessException {
 		return query(query, rowMapper, createPreparedStatementSetter(values));
 	}
 	
-	public User queryForObject(String query, RowMapper<User> rowMapper, PreparedStatementSetter pss) throws DataAccessException {
+	public T queryForObject(String query, RowMapper<T> rowMapper, PreparedStatementSetter pss) throws DataAccessException {
         ResultSet rs = null;
         try(Connection con = ConnectionManager.getConnection();
         		PreparedStatement pstmt = con.prepareStatement(query)) {
@@ -61,7 +63,7 @@ public class JdbcTemplate {
             
             rs = pstmt.executeQuery();
             
-            return (User) rowMapper.mapRow(rs);
+            return (T) rowMapper.mapRow(rs);
         } catch(SQLException e){
         	throw new DataAccessException(e);
         } finally {
@@ -75,7 +77,7 @@ public class JdbcTemplate {
         }
 	}
 	
-	public User queryForObject(String query, RowMapper<User> rowMapper, Object...values) throws DataAccessException {
+	public T queryForObject(String query, RowMapper<T> rowMapper, Object...values) throws DataAccessException {
 		return queryForObject(query, rowMapper, createPreparedStatementSetter(values));
 	}
 	

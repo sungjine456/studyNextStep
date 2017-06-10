@@ -1,4 +1,4 @@
-package study.next.web;
+package study.next.web.user;
 
 import java.sql.SQLException;
 

@@ -3,13 +3,13 @@ package study.core.mvc;
 import java.util.HashMap;
 import java.util.Map;
 
-import study.next.web.CreateUserController;
 import study.next.web.HomeController;
-import study.next.web.ListUserController;
-import study.next.web.LoginController;
-import study.next.web.LogoutController;
-import study.next.web.UpdateUserController;
-import study.next.web.UpdateUserFormController;
+import study.next.web.user.CreateUserController;
+import study.next.web.user.ListUserController;
+import study.next.web.user.LoginController;
+import study.next.web.user.LogoutController;
+import study.next.web.user.UpdateUserController;
+import study.next.web.user.UpdateUserFormController;
 
 public class RequestMapping {
 	private Map<String, Controller> mappingUrl = new HashMap<>();

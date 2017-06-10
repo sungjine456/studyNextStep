@@ -1,4 +1,4 @@
-package study.next.web;
+package study.next.web.user;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

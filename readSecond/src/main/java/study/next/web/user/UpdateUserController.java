@@ -1,4 +1,4 @@
-package study.next.web;
+package study.next.web.user;
 
 import java.sql.SQLException;
 
@@ -13,25 +13,25 @@ import study.core.mvc.Controller;
 import study.next.dao.UserDao;
 import study.next.model.User;
 
-public class UpdateUserFormController implements Controller {
-	private static final Logger log = LoggerFactory.getLogger(UpdateUserFormController.class);
+public class UpdateUserController implements Controller {
+	private static final Logger log = LoggerFactory.getLogger(UpdateUserController.class);
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
 		HttpSession session = req.getSession();
     	User user = (User)session.getAttribute("user");
     	if(user == null || user.getUserId().equals(req.getParameter("userId"))){
     		log.info("empty user session");
-    		return "redirect:/";
+            return "rediect:/";
     	}
     	log.info("is user session");
-    	UserDao userDao = new UserDao();
-    	User findUser = null;
-    	try {
-			findUser = userDao.findByUserId(req.getParameter("userId"));
+		User updateUser = new User(req.getParameter("userId"), req.getParameter("password"), req.getParameter("name"),
+                req.getParameter("email"));
+		UserDao userDao = new UserDao();
+		try {
+			userDao.update(updateUser);
 		} catch (SQLException e) {
 			log.error(e.getMessage());
 		}
-		req.setAttribute("user", findUser);
-		return "/user/update.jsp";
+		return "redirect:/user/list";
 	}
 }

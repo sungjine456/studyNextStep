@@ -22,7 +22,7 @@ public class RequestMapping {
 		mappingUrl.put("/user/list", new ListUserController());
 		mappingUrl.put("/user/create", new CreateUserController());
 		mappingUrl.put("/users/update", new UpdateUserController());
-		mappingUrl.put("/updateUserForm", new UpdateUserFormController());
+		mappingUrl.put("/users/updateForm", new UpdateUserFormController());
 	}
 	
 	public Controller findController(String url){

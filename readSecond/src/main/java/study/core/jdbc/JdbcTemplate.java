@@ -63,7 +63,12 @@ public class JdbcTemplate<T> {
             
             rs = pstmt.executeQuery();
             
-            return (T) rowMapper.mapRow(rs);
+            
+            T t = null;
+            if (rs.next()) {
+                t = rowMapper.mapRow(rs);
+            }
+            return t;
         } catch(SQLException e){
         	throw new DataAccessException(e);
         } finally {

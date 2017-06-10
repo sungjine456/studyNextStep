@@ -31,12 +31,8 @@ public class UserDao {
     public User findByUserId(String userId) throws SQLException {
     	JdbcTemplate<User> selectJdbcTemplate = new JdbcTemplate<User>();
     	return selectJdbcTemplate.queryForObject("SELECT userId, password, name, email FROM USERS WHERE userid=?",(ResultSet rs)->{
-    		User user = null;
-            if (rs.next()) {
-                user = new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
-                        rs.getString("email"));
-            }
-            return user;
+            return new User(rs.getString("userId"), rs.getString("password"), rs.getString("name"),
+                    rs.getString("email"));
     	},userId);
     }
 }

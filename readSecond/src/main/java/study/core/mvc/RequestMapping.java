@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import study.next.web.HomeController;
+import study.next.web.qna.AddAnswerController;
 import study.next.web.qna.ShowController;
 import study.next.web.user.CreateUserController;
 import study.next.web.user.ListUserController;
@@ -25,6 +26,7 @@ public class RequestMapping {
 		mappingUrl.put("/users/update", new UpdateUserController());
 		mappingUrl.put("/users/updateForm", new UpdateUserFormController());
 		mappingUrl.put("/qna/show", new ShowController());
+		mappingUrl.put("/api/qna/addAnswer", new AddAnswerController());
 	}
 	
 	public Controller findController(String url){

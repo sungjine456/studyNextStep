@@ -15,4 +15,11 @@ public class AnswerDao {
                     rs.getDate("createdDate"), questionId);
 		}, questionId);
 	}
+	
+	public Answer insert(Answer answer){
+		JdbcTemplate<Answer> insertJdbcTemplate = new JdbcTemplate<Answer>();
+		insertJdbcTemplate.update("INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)"
+							, answer.getWriter(), answer.getContents(), answer.getCreatedDate(), answer.getQuestionId());
+		return answer;
+	}
 }

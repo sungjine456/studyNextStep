@@ -34,6 +34,9 @@ public class DispatcherServlet extends HttpServlet {
 		try {
 			String viewName = controller.execute(req, res);
 			log.info("viewName : {}", viewName);
+			if(viewName == null){
+				return;
+			}
 			if(viewName.startsWith(DEFAULT_REDIRECT_PREFIX)){
 				log.info(viewName.substring(DEFAULT_REDIRECT_PREFIX.length()));
 				res.sendRedirect(viewName.substring(DEFAULT_REDIRECT_PREFIX.length()));

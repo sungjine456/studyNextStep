@@ -22,4 +22,8 @@ public class AnswerDao {
 							, answer.getWriter(), answer.getContents(), answer.getCreatedDate(), answer.getQuestionId());
 		return answer;
 	}
+	
+	public void delete(long id){
+		
+	}
 }

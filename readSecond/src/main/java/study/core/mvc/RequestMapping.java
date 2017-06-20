@@ -5,6 +5,7 @@ import java.util.Map;
 
 import study.next.web.HomeController;
 import study.next.web.qna.AddAnswerController;
+import study.next.web.qna.DeleteAnswerController;
 import study.next.web.qna.ShowController;
 import study.next.web.user.CreateUserController;
 import study.next.web.user.ListUserController;
@@ -27,6 +28,7 @@ public class RequestMapping {
 		mappingUrl.put("/users/updateForm", new UpdateUserFormController());
 		mappingUrl.put("/qna/show", new ShowController());
 		mappingUrl.put("/api/qna/addAnswer", new AddAnswerController());
+		mappingUrl.put("/api/qna/deleteAnswer", new DeleteAnswerController());
 	}
 	
 	public Controller findController(String url){

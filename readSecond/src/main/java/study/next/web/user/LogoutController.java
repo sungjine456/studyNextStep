@@ -8,15 +8,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import study.core.mvc.Controller;
+import study.core.mvc.JspView;
+import study.core.mvc.View;
 
 public class LogoutController implements Controller {
 	private static final Logger log = LoggerFactory.getLogger(LogoutController.class);
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public View execute(HttpServletRequest req, HttpServletResponse resp) {
     	log.info("logout controller");
 		HttpSession session = req.getSession();
 		session.removeAttribute("user");
 		
-		return "redirect:/user/list";
+		return new JspView("redirect:/user/list");
 	}
 }

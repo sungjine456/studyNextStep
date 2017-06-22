@@ -10,18 +10,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import study.core.mvc.Controller;
+import study.core.mvc.JspView;
+import study.core.mvc.View;
 import study.next.dao.UserDao;
 import study.next.model.User;
 
 public class UpdateUserController implements Controller {
 	private static final Logger log = LoggerFactory.getLogger(UpdateUserController.class);
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public View execute(HttpServletRequest req, HttpServletResponse resp) {
 		HttpSession session = req.getSession();
     	User user = (User)session.getAttribute("user");
     	if(user == null || user.getUserId().equals(req.getParameter("userId"))){
     		log.info("empty user session");
-            return "rediect:/";
+            return new JspView("rediect:/");
     	}
     	log.info("is user session");
 		User updateUser = new User(req.getParameter("userId"), req.getParameter("password"), req.getParameter("name"),
@@ -32,6 +34,6 @@ public class UpdateUserController implements Controller {
 		} catch (SQLException e) {
 			log.error(e.getMessage());
 		}
-		return "redirect:/user/list";
+		return new JspView("redirect:/user/list");
 	}
 }

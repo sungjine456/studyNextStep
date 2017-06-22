@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import study.core.mvc.Controller;
+import study.core.mvc.JspView;
+import study.core.mvc.View;
 import study.next.dao.QuestionDao;
 
 public class HomeController implements Controller {
@@ -15,9 +17,9 @@ public class HomeController implements Controller {
 	QuestionDao questionDao = new QuestionDao();
 	
 	@Override
-	public String execute(HttpServletRequest req, HttpServletResponse res) {
+	public View execute(HttpServletRequest req, HttpServletResponse res) {
 		log.info("HomeController");
 		req.setAttribute("questions", questionDao.findAll());
-		return "/home.jsp";
+		return new JspView("/home.jsp");
 	}
 }

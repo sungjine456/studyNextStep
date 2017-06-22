@@ -6,17 +6,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import study.core.mvc.Controller;
-import study.core.mvc.JsonView;
-import study.core.mvc.View;
+import study.core.mvc.AbstractController;
+import study.core.mvc.ModelAndView;
 import study.next.dao.AnswerDao;
 import study.next.model.Answer;
 
-public class AddAnswerController implements Controller {
+public class AddAnswerController extends AbstractController {
 	private static final Logger log = LoggerFactory.getLogger(AddAnswerController.class);
 	
 	@Override
-	public View execute(HttpServletRequest req, HttpServletResponse res) {
+	public ModelAndView execute(HttpServletRequest req, HttpServletResponse res) {
 		Answer answer = new Answer(req.getParameter("writer"), req.getParameter("contents")
 								, Long.parseLong(req.getParameter("questionId")));
 		
@@ -24,7 +23,6 @@ public class AddAnswerController implements Controller {
 		
 		AnswerDao answerDao = new AnswerDao();
 		Answer savedAnswer = answerDao.insert(answer);
-		req.setAttribute("answer", savedAnswer);
-		return new JsonView();
+		return jsonView().addObject("answer", savedAnswer);
 	}
 }

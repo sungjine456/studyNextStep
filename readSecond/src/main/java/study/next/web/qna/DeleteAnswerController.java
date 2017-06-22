@@ -6,23 +6,22 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import study.core.mvc.Controller;
-import study.core.mvc.JsonView;
-import study.core.mvc.View;
+import study.core.mvc.AbstractController;
+import study.core.mvc.ModelAndView;
 import study.next.dao.AnswerDao;
+import study.next.model.Result;
 
-public class DeleteAnswerController implements Controller {
+public class DeleteAnswerController extends AbstractController {
 	private static final Logger log = LoggerFactory.getLogger(DeleteAnswerController.class);
 	
 	@Override
-	public View execute(HttpServletRequest req, HttpServletResponse res) {
+	public ModelAndView execute(HttpServletRequest req, HttpServletResponse res) {
 		long answerId = Long.parseLong(req.getParameter("answerId"));
 		
 		log.info("answerId : {}", answerId);
 		
 		AnswerDao answerDao = new AnswerDao();
 		answerDao.delete(answerId);
-		req.setAttribute("status", "true");
-		return new JsonView();
+		return jsonView().addObject("result", Result.ok());
 	}
 }

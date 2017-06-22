@@ -9,21 +9,20 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import study.core.mvc.Controller;
-import study.core.mvc.JspView;
-import study.core.mvc.View;
+import study.core.mvc.AbstractController;
+import study.core.mvc.ModelAndView;
 import study.next.dao.UserDao;
 import study.next.model.User;
 
-public class UpdateUserFormController implements Controller {
+public class UpdateUserFormController extends AbstractController {
 	private static final Logger log = LoggerFactory.getLogger(UpdateUserFormController.class);
     @Override
-    public View execute(HttpServletRequest req, HttpServletResponse resp) {
+    public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) {
 		HttpSession session = req.getSession();
     	User user = (User)session.getAttribute("user");
     	if(user == null || user.getUserId().equals(req.getParameter("userId"))){
     		log.info("empty user session");
-    		return new JspView("redirect:/");
+    		return jspView("redirect:/");
     	}
     	log.info("is user session");
     	UserDao userDao = new UserDao();
@@ -33,7 +32,6 @@ public class UpdateUserFormController implements Controller {
 		} catch (SQLException e) {
 			log.error(e.getMessage());
 		}
-		req.setAttribute("user", findUser);
-		return new JspView("/user/update.jsp");
+		return jspView("/user/update.jsp").addObject("user", findUser);
 	}
 }

@@ -10,28 +10,27 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import study.core.mvc.Controller;
-import study.core.mvc.JspView;
-import study.core.mvc.View;
+import study.core.mvc.AbstractController;
+import study.core.mvc.ModelAndView;
 import study.next.dao.AnswerDao;
 import study.next.dao.QuestionDao;
 import study.next.model.Answer;
 import study.next.model.Question;
 
-public class ShowController implements Controller {
+public class ShowController extends AbstractController {
 	private static final Logger log = LoggerFactory.getLogger(ShowController.class);
 
 	@Override
-	public View execute(HttpServletRequest req, HttpServletResponse res) {
+	public ModelAndView execute(HttpServletRequest req, HttpServletResponse res) {
 		HttpSession session = req.getSession();
 		
 		if(session.getAttribute("user") == null){
 			log.info("showController user session is null");
-			return new JspView("redirect:/users/loginForm");
+			return jspView("redirect:/users/loginForm");
 		}
 		if(req.getParameter("questionId") == null){
 			log.info("showController questionId is " + req.getParameter("questionId"));
-			return new JspView("redirect:/");
+			return jspView("redirect:/");
 		}
 		QuestionDao questionDao = new QuestionDao();
 		AnswerDao answerDao = new AnswerDao();
@@ -45,8 +44,6 @@ public class ShowController implements Controller {
 			log.error(e.getMessage());
 		}
 		
-		req.setAttribute("question", question);
-		req.setAttribute("answers", answers);
-		return new JspView("/qna/show.jsp");
+		return jspView("/qna/show.jsp").addObject("question", question).addObject("answers", answers);
 	}
 }

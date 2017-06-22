@@ -9,16 +9,15 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import study.core.mvc.Controller;
-import study.core.mvc.JspView;
-import study.core.mvc.View;
+import study.core.mvc.AbstractController;
+import study.core.mvc.ModelAndView;
 import study.next.dao.UserDao;
 import study.next.model.User;
 
-public class LoginController implements Controller {
+public class LoginController extends AbstractController {
 	private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 	@Override
-	public View execute(HttpServletRequest req, HttpServletResponse resp) {
+	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) {
 		log.info("in login controller");
 		UserDao userDao = new UserDao();
 		try{
@@ -27,12 +26,11 @@ public class LoginController implements Controller {
 				log.info("success login");
 				HttpSession session = req.getSession();
 				session.setAttribute("user", user);
-				req.setAttribute("users", userDao.findAll());
-				return new JspView("redirect:/user/list");
+				return jspView("redirect:/user/list").addObject("users", userDao.findAll());
 			}
 		}catch(SQLException e){
 			log.error(e.getMessage());
 		}
-		return new JspView("redirect:/users/loginForm");
+		return jspView("redirect:/users/loginForm");
 	}
 }

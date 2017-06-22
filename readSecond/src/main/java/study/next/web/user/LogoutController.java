@@ -7,18 +7,17 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import study.core.mvc.Controller;
-import study.core.mvc.JspView;
-import study.core.mvc.View;
+import study.core.mvc.AbstractController;
+import study.core.mvc.ModelAndView;
 
-public class LogoutController implements Controller {
+public class LogoutController extends AbstractController {
 	private static final Logger log = LoggerFactory.getLogger(LogoutController.class);
     @Override
-    public View execute(HttpServletRequest req, HttpServletResponse resp) {
+    public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) {
     	log.info("logout controller");
 		HttpSession session = req.getSession();
 		session.removeAttribute("user");
 		
-		return new JspView("redirect:/user/list");
+		return jspView("redirect:/user/list");
 	}
 }

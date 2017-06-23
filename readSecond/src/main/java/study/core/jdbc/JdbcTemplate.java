@@ -10,6 +10,16 @@ import java.util.List;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 
 public class JdbcTemplate<T> {
+	
+	private static JdbcTemplate<Object> jdbcTemplate = new JdbcTemplate<Object>() {};
+	
+	private JdbcTemplate(){}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> JdbcTemplate<T> getInstance(){
+		return (JdbcTemplate<T>) jdbcTemplate;
+	}
+	
 	public void update(String query, PreparedStatementSetter pss) throws DataAccessException {
         try(Connection con = ConnectionManager.getConnection();
         		PreparedStatement pstmt = con.prepareStatement(query)) {

@@ -14,9 +14,10 @@ import study.core.jdbc.KeyHolder;
 import study.next.model.Question;
 
 public class QuestionDao {
+	private JdbcTemplate<Question> jdbcTemplate = JdbcTemplate.getInstance();
+	
 	public Question findByQuestionId(long questionId) {
-		JdbcTemplate<Question> selectJdbcTemplate = new JdbcTemplate<Question>();
-    	return selectJdbcTemplate.queryForObject("SELECT questionId, writer, title, contents, createdDate, countOfAnswer"
+    	return jdbcTemplate.queryForObject("SELECT questionId, writer, title, contents, createdDate, countOfAnswer"
     			+ " FROM QUESTIONS WHERE questionId=?",(ResultSet rs)->{
             return new Question(rs.getLong("questionId"), rs.getString("writer"), rs.getString("title"),
                     rs.getString("contents"), rs.getDate("createdDate"), rs.getInt("countOfAnswer"));
@@ -24,8 +25,7 @@ public class QuestionDao {
     }
 
 	public List<Question> findAll() {
-		JdbcTemplate<Question> selectJdbcTemplate = new JdbcTemplate<Question>();
-    	return selectJdbcTemplate.query("SELECT questionId, writer, title, contents, createdDate, countOfAnswer"
+    	return jdbcTemplate.query("SELECT questionId, writer, title, contents, createdDate, countOfAnswer"
     			+ " FROM QUESTIONS",(ResultSet rs)->{
             return new Question(rs.getLong("questionId"), rs.getString("writer"), rs.getString("title"),
                     rs.getString("contents"), rs.getDate("createdDate"), rs.getInt("countOfAnswer"));
@@ -33,7 +33,6 @@ public class QuestionDao {
 	}
 	
 	public Question insert(Question question) {
-        JdbcTemplate<Question> jdbcTemplate = new JdbcTemplate<>();
         String sql = "INSERT INTO QUESTIONS " + 
                 "(writer, title, contents, createdDate) " + 
                 " VALUES (?, ?, ?, ?)";

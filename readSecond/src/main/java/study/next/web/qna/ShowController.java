@@ -1,6 +1,5 @@
 package study.next.web.qna;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,14 +34,8 @@ public class ShowController extends AbstractController {
 		QuestionDao questionDao = new QuestionDao();
 		AnswerDao answerDao = new AnswerDao();
 		long questionId = Long.parseLong(req.getParameter("questionId"));
-		Question question = null;
-		List<Answer> answers = null;
-		try {
-			question = questionDao.findByQuestionId(questionId);
-			answers = answerDao.findAllByQuestionId(questionId);
-		} catch (SQLException e){
-			log.error(e.getMessage());
-		}
+		Question question = questionDao.findByQuestionId(questionId);
+		List<Answer> answers = answerDao.findAllByQuestionId(questionId);
 		
 		return jspView("/qna/show.jsp").addObject("question", question).addObject("answers", answers);
 	}

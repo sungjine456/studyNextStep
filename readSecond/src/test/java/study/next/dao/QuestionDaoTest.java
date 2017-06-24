@@ -16,6 +16,8 @@ import study.core.jdbc.ConnectionManager;
 import study.next.model.Question;
 
 public class QuestionDaoTest {
+	private QuestionDao questionDao = QuestionDao.getInstance();
+	
 	@Before
     public void setup() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
@@ -25,14 +27,12 @@ public class QuestionDaoTest {
 	
 	@Test
 	public void findAllTest(){
-    	QuestionDao questionDao = new QuestionDao();
 		List<Question> questions = questionDao.findAll();
 		assertThat(questions.size(), is(8));
 	}
 
     @Test
     public void findByQuestionIdTest() throws Exception {
-    	QuestionDao questionDao = new QuestionDao();
         Question question = questionDao.findByQuestionId(1L);
         assertThat(question.getWriter(), is("자바지기"));
         assertTrue(question.getTitle().startsWith("국내에서"));

@@ -16,6 +16,9 @@ import study.next.model.User;
 
 public class AddQuestionController extends AbstractController {
 	private Logger log = LoggerFactory.getLogger(AddQuestionController.class);
+	
+	private QuestionDao questionDao = QuestionDao.getInstance();
+	private UserDao userDao = UserDao.getInstance();
 
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse res) {
@@ -25,8 +28,6 @@ public class AddQuestionController extends AbstractController {
 		if(user == null){
 			return jspView("redirect:/users/loginForm");
 		}
-		QuestionDao questionDao = new QuestionDao();
-		UserDao userDao = new UserDao();
 		questionDao.insert(new Question(userDao.findByUserId(user.getUserId()), req.getParameter("title"), req.getParameter("contents")));
 		
 		return jspView("redirect:/");

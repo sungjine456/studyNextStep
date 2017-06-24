@@ -7,6 +7,18 @@ import study.core.jdbc.JdbcTemplate;
 import study.next.model.User;
 
 public class UserDao {
+	
+	private static UserDao userDao = new UserDao();
+
+	public static UserDao getInstance(){
+		if (userDao == null) {
+			userDao = new UserDao();
+        }
+		return userDao;
+	}
+	
+	private UserDao(){}
+	
 	private  JdbcTemplate<User> jdbcTemplate = JdbcTemplate.getInstance();
 	
     public void insert(User user) {

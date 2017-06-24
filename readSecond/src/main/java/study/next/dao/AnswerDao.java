@@ -7,6 +7,18 @@ import study.core.jdbc.JdbcTemplate;
 import study.next.model.Answer;
 
 public class AnswerDao {
+	
+	private static AnswerDao answerDao = new AnswerDao();
+
+	public static AnswerDao getInstance(){
+		if (answerDao == null) {
+			answerDao = new AnswerDao();
+        }
+		return answerDao;
+	}
+	
+	private AnswerDao(){}
+	
 	private JdbcTemplate<Answer> jdbcTemplate = JdbcTemplate.getInstance();
 	
 	public Answer findByAnswerId(long answerId) {

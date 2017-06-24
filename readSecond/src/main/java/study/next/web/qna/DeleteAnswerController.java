@@ -14,8 +14,8 @@ import study.next.model.Result;
 
 public class DeleteAnswerController extends AbstractController {
 	private static final Logger log = LoggerFactory.getLogger(DeleteAnswerController.class);
-	private AnswerDao answerDao = new AnswerDao();
-	private QuestionDao questionDao = new QuestionDao();
+	private AnswerDao answerDao = AnswerDao.getInstance();
+	private QuestionDao questionDao = QuestionDao.getInstance();
 	
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse res) {

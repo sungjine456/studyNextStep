@@ -14,7 +14,9 @@ import study.next.model.User;
 
 public class UpdateUserController extends AbstractController {
 	private static final Logger log = LoggerFactory.getLogger(UpdateUserController.class);
-    @Override
+	private UserDao userDao = UserDao.getInstance();
+    
+	@Override
     public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) {
 		HttpSession session = req.getSession();
     	User user = (User)session.getAttribute("user");
@@ -25,7 +27,6 @@ public class UpdateUserController extends AbstractController {
     	log.info("is user session");
 		User updateUser = new User(req.getParameter("userId"), req.getParameter("password"), req.getParameter("name"),
                 req.getParameter("email"));
-		UserDao userDao = new UserDao();
 		userDao.update(updateUser);
 		session.setAttribute("user", updateUser);
 		return jspView("redirect:/user/list");

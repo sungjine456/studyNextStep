@@ -11,6 +11,7 @@ import study.next.model.Question;
 import study.next.model.User;
 
 public class UpdateFormQuestionController extends AbstractController {
+	private QuestionDao questionDao = QuestionDao.getInstance();
 
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse res) {
@@ -19,7 +20,6 @@ public class UpdateFormQuestionController extends AbstractController {
 		
 		long questionId = Long.parseLong(req.getParameter("questionId"));
 		
-		QuestionDao questionDao = new QuestionDao();
 		Question question = questionDao.findByQuestionId(questionId);
 		
 		if(!question.getWriter().equals(user)){

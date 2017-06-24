@@ -14,6 +14,7 @@ import study.next.model.User;
 
 public class CreateUserController extends AbstractController {
     private static final Logger log = LoggerFactory.getLogger(CreateUserController.class);
+    private UserDao userDao = UserDao.getInstance();
 
     @Override
     public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) {
@@ -21,7 +22,6 @@ public class CreateUserController extends AbstractController {
                 req.getParameter("email"));
         log.info("user : {}", user);
         
-        UserDao userDao = new UserDao();
     	userDao.insert(user);
 
         HttpSession session = req.getSession();

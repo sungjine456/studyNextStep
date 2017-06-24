@@ -16,6 +16,8 @@ import study.next.model.User;
 
 public class ListUserController extends AbstractController {
 	private static final Logger log = LoggerFactory.getLogger(ListUserController.class);
+	private UserDao userDao = UserDao.getInstance();
+	
     @Override
     public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) {
     	HttpSession session = req.getSession();
@@ -25,7 +27,6 @@ public class ListUserController extends AbstractController {
     		return jspView("redirect:/");
     	}
     	log.info("User not null");
-    	UserDao userDao = new UserDao();
     	List<User> userList = userDao.findAll();
         return jspView("/user/list.jsp").addObject("users", userList);
     }

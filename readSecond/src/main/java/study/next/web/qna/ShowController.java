@@ -18,6 +18,8 @@ import study.next.model.Question;
 
 public class ShowController extends AbstractController {
 	private static final Logger log = LoggerFactory.getLogger(ShowController.class);
+	private QuestionDao questionDao = QuestionDao.getInstance();
+	private AnswerDao answerDao = AnswerDao.getInstance();
 
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse res) {
@@ -31,8 +33,6 @@ public class ShowController extends AbstractController {
 			log.info("showController questionId is " + req.getParameter("questionId"));
 			return jspView("redirect:/");
 		}
-		QuestionDao questionDao = new QuestionDao();
-		AnswerDao answerDao = new AnswerDao();
 		long questionId = Long.parseLong(req.getParameter("questionId"));
 		Question question = questionDao.findByQuestionId(questionId);
 		List<Answer> answers = answerDao.findAllByQuestionId(questionId);

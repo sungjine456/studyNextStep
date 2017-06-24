@@ -11,12 +11,12 @@ import study.next.model.Question;
 import study.next.model.User;
 
 public class UpdateQuestionController extends AbstractController {
+	private QuestionDao questionDao = QuestionDao.getInstance();
 
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse res) {
 		HttpSession session = req.getSession();
 		User user = (User)session.getAttribute("user");
-		QuestionDao questionDao = new QuestionDao();
 		Question question = questionDao.findByQuestionId(Long.parseLong(req.getParameter("questionId")));
 		if(!user.equals(question.getWriter())){
 			return jspView("redirect:/");

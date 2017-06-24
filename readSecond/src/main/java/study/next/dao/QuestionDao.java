@@ -15,8 +15,20 @@ import study.next.model.Question;
 import study.next.model.User;
 
 public class QuestionDao {
+	
+	private static QuestionDao questionDao = new QuestionDao();
+
+	public static QuestionDao getInstance(){
+		if (questionDao == null) {
+			questionDao = new QuestionDao();
+        }
+		return questionDao;
+	}
+	
+	private QuestionDao(){}
+	
 	private JdbcTemplate<Question> jdbcTemplate = JdbcTemplate.getInstance();
-	private UserDao userDao = new UserDao();
+	private UserDao userDao = UserDao.getInstance();
 	
 	public Question findByQuestionId(long questionId) {
     	return jdbcTemplate.queryForObject("SELECT questionId, writer, title, contents, createdDate, countOfAnswer"

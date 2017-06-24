@@ -13,7 +13,7 @@ import study.next.dao.QuestionDao;
 public class HomeController extends AbstractController {
 	private static final Logger log = LoggerFactory.getLogger(HomeController.class);
 	
-	QuestionDao questionDao = new QuestionDao();
+	private QuestionDao questionDao = QuestionDao.getInstance();
 	
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse res) {

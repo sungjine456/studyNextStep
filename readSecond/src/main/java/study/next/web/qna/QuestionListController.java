@@ -9,7 +9,8 @@ import study.next.dao.QuestionDao;
 
 public class QuestionListController extends AbstractController {
 	
-	private QuestionDao questionDao = new QuestionDao();
+	private QuestionDao questionDao = QuestionDao.getInstance();
+	
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse res) {
 		return jsonView().addObject("questionList", questionDao.findAll());

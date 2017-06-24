@@ -14,6 +14,8 @@ import study.core.jdbc.ConnectionManager;
 import study.next.model.Answer;
 
 public class AnswerDaoTest {
+	private AnswerDao answerDao = AnswerDao.getInstance();
+	
 	@Before
     public void setup() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
@@ -23,7 +25,6 @@ public class AnswerDaoTest {
 
     @Test
     public void findAll() throws Exception {
-        AnswerDao answerDao = new AnswerDao();
         List<Answer> answers = answerDao.findAllByQuestionId(8L);
         assertEquals(3, answers.size());
         answers = answerDao.findAllByQuestionId(7L);

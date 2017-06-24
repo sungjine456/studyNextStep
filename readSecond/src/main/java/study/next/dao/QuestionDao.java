@@ -52,4 +52,9 @@ public class QuestionDao {
         jdbcTemplate.update(psc, keyHolder);
         return findByQuestionId(keyHolder.getId());
     }
+	
+	public void updateCountOfAnswer(long questionId) {
+        String sql = "UPDATE QUESTIONS set countOfAnswer = countOfAnswer + 1 WHERE questionId = ?";
+        jdbcTemplate.update(sql, questionId);
+    }
 }

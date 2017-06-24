@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import study.core.mvc.AbstractController;
 import study.core.mvc.ModelAndView;
 import study.next.dao.AnswerDao;
+import study.next.dao.QuestionDao;
 import study.next.model.Answer;
 
 public class AddAnswerController extends AbstractController {
@@ -16,13 +17,17 @@ public class AddAnswerController extends AbstractController {
 	
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse res) {
+		long questionId = Long.parseLong(req.getParameter("questionId"));
 		Answer answer = new Answer(req.getParameter("writer"), req.getParameter("contents")
-								, Long.parseLong(req.getParameter("questionId")));
+								, questionId);
 		
 		log.debug("answer : {}", answer);
 		
 		AnswerDao answerDao = new AnswerDao();
+		QuestionDao questionDao = new QuestionDao();
 		Answer savedAnswer = answerDao.insert(answer);
-		return jsonView().addObject("answer", savedAnswer);
+		questionDao.updateCountOfAnswer(questionId);
+		int countOfAnswer = questionDao.findByQuestionId(questionId).getCountOfAnswer();
+		return jsonView().addObject("answer", savedAnswer).addObject("countOfAnswer", countOfAnswer);
 	}
 }

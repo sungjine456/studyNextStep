@@ -1,6 +1,5 @@
 package study.next.web.user;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,12 +26,7 @@ public class ListUserController extends AbstractController {
     	}
     	log.info("User not null");
     	UserDao userDao = new UserDao();
-    	List<User> userList = null;
-        try {
-        	userList = userDao.findAll();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+    	List<User> userList = userDao.findAll();
         return jspView("/user/list.jsp").addObject("users", userList);
     }
 }

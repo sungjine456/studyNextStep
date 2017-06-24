@@ -1,7 +1,5 @@
 package study.next.web.user;
 
-import java.sql.SQLException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -24,11 +22,7 @@ public class CreateUserController extends AbstractController {
         log.info("user : {}", user);
         
         UserDao userDao = new UserDao();
-        try{
-        	userDao.insert(user);
-        } catch(SQLException e){
-        	log.error(e.getMessage());
-        }
+    	userDao.insert(user);
 
         HttpSession session = req.getSession();
 		session.setAttribute("user", user);

@@ -1,7 +1,5 @@
 package study.next.web.user;
 
-import java.sql.SQLException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -28,11 +26,8 @@ public class UpdateUserController extends AbstractController {
 		User updateUser = new User(req.getParameter("userId"), req.getParameter("password"), req.getParameter("name"),
                 req.getParameter("email"));
 		UserDao userDao = new UserDao();
-		try {
-			userDao.update(updateUser);
-		} catch (SQLException e) {
-			log.error(e.getMessage());
-		}
+		userDao.update(updateUser);
+		session.setAttribute("user", updateUser);
 		return jspView("redirect:/user/list");
 	}
 }

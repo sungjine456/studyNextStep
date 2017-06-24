@@ -1,7 +1,5 @@
 package study.next.web.user;
 
-import java.sql.SQLException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,16 +18,12 @@ public class LoginController extends AbstractController {
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse resp) {
 		log.info("in login controller");
 		UserDao userDao = new UserDao();
-		try{
-			User user = userDao.findByUserId(req.getParameter("userId"));
-			if(user != null){
-				log.info("success login");
-				HttpSession session = req.getSession();
-				session.setAttribute("user", user);
-				return jspView("redirect:/user/list").addObject("users", userDao.findAll());
-			}
-		}catch(SQLException e){
-			log.error(e.getMessage());
+		User user = userDao.findByUserId(req.getParameter("userId"));
+		if(user != null){
+			log.info("success login");
+			HttpSession session = req.getSession();
+			session.setAttribute("user", user);
+			return jspView("redirect:/user/list").addObject("users", userDao.findAll());
 		}
 		return jspView("redirect:/users/loginForm");
 	}

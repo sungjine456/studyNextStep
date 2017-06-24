@@ -1,7 +1,5 @@
 package study.next.web.user;
 
-import java.sql.SQLException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -26,12 +24,7 @@ public class UpdateUserFormController extends AbstractController {
     	}
     	log.info("is user session");
     	UserDao userDao = new UserDao();
-    	User findUser = null;
-    	try {
-			findUser = userDao.findByUserId(req.getParameter("userId"));
-		} catch (SQLException e) {
-			log.error(e.getMessage());
-		}
+    	User findUser = userDao.findByUserId(req.getParameter("userId"));
 		return jspView("/user/update.jsp").addObject("user", findUser);
 	}
 }

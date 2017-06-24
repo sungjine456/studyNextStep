@@ -9,19 +9,25 @@ import org.slf4j.LoggerFactory;
 import study.core.mvc.AbstractController;
 import study.core.mvc.ModelAndView;
 import study.next.dao.AnswerDao;
+import study.next.dao.QuestionDao;
 import study.next.model.Result;
 
 public class DeleteAnswerController extends AbstractController {
 	private static final Logger log = LoggerFactory.getLogger(DeleteAnswerController.class);
+	private AnswerDao answerDao = new AnswerDao();
+	private QuestionDao questionDao = new QuestionDao();
 	
 	@Override
 	public ModelAndView execute(HttpServletRequest req, HttpServletResponse res) {
 		long answerId = Long.parseLong(req.getParameter("answerId"));
+		long questionId = answerDao.findByAnswerId(answerId).getQuestionId();
 		
 		log.info("answerId : {}", answerId);
 		
-		AnswerDao answerDao = new AnswerDao();
 		answerDao.delete(answerId);
-		return jsonView().addObject("result", Result.ok());
+		questionDao.decreaseCountOfAnswer(questionId);
+		
+		int countOfAnswers = questionDao.findByQuestionId(questionId).getCountOfAnswer();
+		return jsonView().addObject("result", Result.ok()).addObject("countOfAnswer", countOfAnswers);
 	}
 }

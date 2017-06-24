@@ -9,6 +9,14 @@ import study.next.model.Answer;
 public class AnswerDao {
 	private JdbcTemplate<Answer> jdbcTemplate = JdbcTemplate.getInstance();
 	
+	public Answer findByAnswerId(long answerId) {
+		return jdbcTemplate.queryForObject("SELECT writer, questionId, contents, createdDate FROM ANSWERS WHERE answerId = ? "
+                + "order by answerId desc",(ResultSet rs)->{
+            return new Answer(answerId, rs.getString("writer"), rs.getString("contents"),
+                    rs.getDate("createdDate"), rs.getLong("questionId"));
+		}, answerId);
+	}
+	
 	public List<Answer> findAllByQuestionId(long questionId) {
 		return jdbcTemplate.query("SELECT answerId, writer, contents, createdDate FROM ANSWERS WHERE questionId = ? "
                 + "order by answerId desc",(ResultSet rs)->{

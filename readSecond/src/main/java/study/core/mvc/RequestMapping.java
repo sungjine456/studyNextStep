@@ -8,6 +8,7 @@ import study.next.web.qna.AddAnswerController;
 import study.next.web.qna.AddQuestionController;
 import study.next.web.qna.DeleteAnswerController;
 import study.next.web.qna.FormController;
+import study.next.web.qna.QuestionListController;
 import study.next.web.qna.ShowController;
 import study.next.web.user.CreateUserController;
 import study.next.web.user.ListUserController;
@@ -33,6 +34,7 @@ public class RequestMapping {
 		mappingUrl.put("/qna/create", new AddQuestionController());
 		mappingUrl.put("/api/qna/addAnswer", new AddAnswerController());
 		mappingUrl.put("/api/qna/deleteAnswer", new DeleteAnswerController());
+		mappingUrl.put("/api/qna/list", new QuestionListController());
 	}
 	
 	public Controller findController(String url){

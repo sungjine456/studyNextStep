@@ -17,7 +17,7 @@ function addAnswer(e) {
 					json.answer.contents, json.answer.answerId);
 			$(".qna-comment-slipp-articles").prepend(template);
 			alert(json.countOfAnswer);
-			$(".qna-comment-count").html("<strong>"+json.countOfAnswer+"</strong>개의 의견");
+			countOfAnswerFuction(json.countOfAnswer);
 		},
 	});
 }
@@ -37,8 +37,9 @@ function deleteAnswer(e) {
 		dataType : 'json',
 		error : onError,
 		success : function(json, status) {
-			if (json.status) {
+			if (json.result.status) {
 				deleteBtn.closest('article').remove();
+				countOfAnswerFuction(json.countOfAnswer);
 			}
 		}
 	});
@@ -46,6 +47,10 @@ function deleteAnswer(e) {
 
 function onError(xhr, status) {
 	alert("error");
+}
+
+function countOfAnswerFuction(countOfAnswer){
+	$(".qna-comment-count").html("<strong>"+countOfAnswer+"</strong>개의 의견");
 }
 
 String.prototype.format = function() {

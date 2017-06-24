@@ -4,16 +4,16 @@ import java.util.Date;
 
 public class Question {
 	private long questionId;
-	private String writer;
+	private User writer;
 	private String title;
 	private String contents;
 	private Date createdDate;
 	private int countOfAnswer;
 	
-	public Question(String writer, String title, String contents){
+	public Question(User writer, String title, String contents){
 		this(0, writer, title, contents, new Date(), 0);
 	}
-	public Question(long questionId, String writer, String title, String contents, Date createDate, int countOfAnswer){
+	public Question(long questionId, User writer, String title, String contents, Date createDate, int countOfAnswer){
 		this.questionId = questionId;
 		this.writer = writer;
 		this.title = title;
@@ -25,7 +25,7 @@ public class Question {
 	public long getQuestionId() {
 		return questionId;
 	}
-	public String getWriter() {
+	public User getWriter() {
 		return writer;
 	}
 	public String getTitle() {
@@ -39,5 +39,10 @@ public class Question {
 	}
 	public int getCountOfAnswer() {
 		return countOfAnswer;
+	}
+	
+	public void update(String title, String contents){
+		this.title = title;
+		this.contents = contents;
 	}
 }

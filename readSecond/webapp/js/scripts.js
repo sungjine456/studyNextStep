@@ -16,7 +16,6 @@ function addAnswer(e) {
 			var template = answerTemplate.format(json.answer.writer,new Date(json.answer.createDate), 
 					json.answer.contents, json.answer.answerId);
 			$(".qna-comment-slipp-articles").prepend(template);
-			alert(json.countOfAnswer);
 			countOfAnswerFuction(json.countOfAnswer);
 		},
 	});

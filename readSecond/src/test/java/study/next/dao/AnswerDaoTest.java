@@ -1,6 +1,8 @@
 package study.next.dao;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
@@ -29,5 +31,14 @@ public class AnswerDaoTest {
         assertEquals(3, answers.size());
         answers = answerDao.findAllByQuestionId(7L);
         assertEquals(2, answers.size());
+    }
+    
+    @Test
+    public void addAnswer() throws Exception {
+        long questionId = 1L;
+        Answer expected = new Answer("javajigi", "answer contents", questionId);
+        Answer answer = answerDao.insert(expected);
+        assertThat(answerDao.findAllByQuestionId(questionId).size(), is(1));
+        assertThat(answer, is(expected));
     }
 }

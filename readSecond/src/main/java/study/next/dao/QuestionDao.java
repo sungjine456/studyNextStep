@@ -16,7 +16,7 @@ import study.next.model.User;
 
 public class QuestionDao {
 	
-	private static QuestionDao questionDao = new QuestionDao();
+	private static QuestionDao questionDao;
 
 	public static QuestionDao getInstance(){
 		if (questionDao == null) {

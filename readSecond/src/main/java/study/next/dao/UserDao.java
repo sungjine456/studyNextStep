@@ -8,7 +8,7 @@ import study.next.model.User;
 
 public class UserDao {
 	
-	private static UserDao userDao = new UserDao();
+	private static UserDao userDao;
 
 	public static UserDao getInstance(){
 		if (userDao == null) {

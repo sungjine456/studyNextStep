@@ -8,7 +8,7 @@ import study.next.model.Answer;
 
 public class AnswerDao {
 	
-	private static AnswerDao answerDao = new AnswerDao();
+	private static AnswerDao answerDao;
 
 	public static AnswerDao getInstance(){
 		if (answerDao == null) {
